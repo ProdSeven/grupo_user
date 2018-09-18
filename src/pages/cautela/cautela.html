@@ -1,0 +1,200 @@
+<!--
+  Generated template for the CautelaPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="cinza">
+    <ion-row>
+        <ion-title text-center *ngIf="cautela == 'add' || editar == true">Cautela</ion-title>
+        <ion-title text-center *ngIf="cautela != 'add' && editar == false">{{cautela.titulo}}</ion-title>
+        <button *ngIf="editar == true" color="danger" ion-button clear item-end (click)="cancelEdit()" icon-only>
+            <ion-icon name='md-close'></ion-icon>
+        </button>
+    </ion-row>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content id="app_fundo_cinza">
+    <div id="edit" *ngIf="(modo == 'edit' || modo == 'aprovado' || modo == 'view' ) && editar == false  ">
+        <ion-fab right bottom>
+            <button style="background-color: rgba(13, 29, 86, 0.809);" ion-fab color="primary"><ion-icon name="md-arrow-dropup"></ion-icon></button>
+            <ion-fab-list side="top">
+              <button *ngIf="modulo.update == true &&  modo == 'edit'" ion-fab (click)="Editar()"><ion-icon name="md-create"></ion-icon></button>
+              <button *ngIf="modo != 'add' && modulo.delete == true && editar == false" color="danger" ion-fab (click)="alertDelete(cautela)">
+                  <ion-icon name='md-trash'></ion-icon>
+              </button>
+            </ion-fab-list>
+        </ion-fab>
+    </div>
+
+    <form *ngIf="cautela == 'add' && editar == false" [formGroup]="signupForm" novalidate> 
+      <ion-list inset>
+      <ion-item style="background-color: rgba(255, 255, 255, 0); color: white">
+        <ion-label color="light" >Titulo</ion-label>
+        <ion-input color="light" formControlName="titulo" type="text" placeholder="Titulo da cautela" [class.invalid]="!signupForm.controls.titulo.valid && blur">
+        </ion-input>
+      </ion-item>
+      <ion-item style="background-color: rgba(255, 255, 255, 0);" class="error-message" *ngIf="!signupForm.controls.titulo.valid
+                           && signupForm.controls.titulo.dirty">
+        <p style="color: white">Por favor informe um titulo com até 30 caracteres</p>
+      </ion-item>
+      <ion-item style="background-color: rgba(255, 255, 255, 0);">
+          <ion-label color="light">Data</ion-label>
+          <ion-datetime color="light" style="color: white" placeholder="DD-MM-YYYY" displayFormat="DD-MM-YYYY" pickerFormat="DD-MM-YYYY" min="2018" max="2028" doneText="ok" cancelText="cancelar" formControlName="data" >
+          </ion-datetime>
+      </ion-item>
+      <ion-item style="background-color: rgba(255, 255, 255, 0);">
+          <ion-label color="light" style="color: white">Setor</ion-label>
+          <ion-select color="light" style="color: white" formControlName="setor">
+            <ion-option color="light" *ngFor="let setor of setores" value="{{setor}}">{{setor}}</ion-option>
+          </ion-select>
+      </ion-item>
+    </ion-list> 
+      <ion-item-divider no-lines text-center color="blueDark">Itens</ion-item-divider>
+      <ion-item  style="background-color: rgba(255, 255, 255, 0); color: white" (click)="addItem()">
+          <ion-icon color="light" name="add" item-end></ion-icon>
+          Adicionar Item
+      </ion-item>
+      <ion-list inset>
+        <ion-item *ngFor="let item of items">
+          <h2>{{item.id}}</h2>
+          <p>{{item.descricao}}</p>
+          <h2 item-end>R${{item.valor}}</h2> 
+          <p item-end> {{item.quantidade}} unid </p>
+          <ion-icon item-end color="danger" (click)="deletarItem(item)" name="md-close"></ion-icon>
+        </ion-item>
+        <ion-item style="color: white" color="blueDark" no-lines *ngIf="total != 0">
+            <h2 >Total</h2>
+            <h2 item-end>R${{total}}</h2>
+        </ion-item>
+      </ion-list>
+      <ion-item-divider no-lines text-center color="blueDark">Aprovador</ion-item-divider>
+      <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+      <ion-list>
+          <ion-item style="background-color: rgba(255, 255, 255, 0); color: white" *ngFor="let usuario of usuPesq" (click)="addAprovador(usuario)">
+            <ion-avatar item-start>
+              <img src="{{usuario.imagem}}">
+            </ion-avatar>
+            <h2>{{usuario.nome}}</h2>
+            <p style="color: white">Setor: {{usuario.setor}}</p>
+            <p style="color: white">Cargo: {{usuario.cargo}}</p>
+            <button ion-button clear item-end icon-only><ion-icon color="light" name="ios-checkmark-circle"></ion-icon></button>
+          </ion-item>
+      </ion-list>
+      <ion-list *ngIf="aprovadores.length != 0">
+          <ion-item style="background-color: rgba(255, 255, 255, 0); color: white" *ngFor="let aprovador of aprovadores">
+            <ion-avatar item-start>
+              <img src="{{aprovador.imagem}}">
+            </ion-avatar>
+            <h2>{{aprovador.nome}}</h2>
+            <p style="color: white">Setor: {{aprovador.setor}}</p>
+            <p style="color: white">Cargo: {{aprovador.cargo}}</p>
+            <button ion-button clear item-end (click)="rmAprovador(aprovador)" color="danger" icon-only><ion-icon name="md-close"></ion-icon></button>
+            <p *ngIf="aprovador.obs && aprovador.obs != false" style="color:white" >Obs: {{aprovador.obs}}</p>
+          </ion-item>
+      </ion-list>
+      <button id="center2" color="blueDark" ion-button round large (click)="criarCautela()" [disabled]="!signupForm.valid">
+        Criar cautela
+      </button> 
+    </form>
+
+    
+    <div *ngIf="cautela != 'add' && editar == false">
+    <ion-item no-lines style="background-color: rgba(255, 255, 255, 0); color: white">
+        <h2>Data: {{cautela.data}}</h2>
+        <h2 item-end>Setor: {{cautela.setor}}</h2>
+    </ion-item>
+    <ion-item-divider no-lines color="blueDark" text-center>ITENS</ion-item-divider>
+    <ion-list no-lines inset>
+        <ion-item (click)="modalItem(item)"  *ngFor="let item of cautela.items">
+          <h2>{{item.id}}</h2>
+          <p>{{item.descricao}}</p>
+          <h2 item-end>R${{item.valor}}</h2> 
+          <p item-end> {{item.quantidade}} unid </p>
+        </ion-item>
+        <ion-item no-lines color="blueDark" *ngIf="cautela.total != null">
+            <h2>Total</h2>
+            <h2 item-end>R${{cautela.total}}</h2>
+        </ion-item>
+    </ion-list>
+    <ion-item-divider no-lines color="blueDark" *ngIf="modo == 'votar' && editar == false" style="text-align:center">Votação</ion-item-divider>
+    <ion-item no-lines style="background-color: rgba(255, 255, 255, 0); color: white"  *ngIf="modo == 'votar' && editar == false">
+        <ion-row id="center2">
+         <span (click)="alert(cautela,false)" ion-fab  mini color="light"><ion-icon color="danger" name="thumbs-down"></ion-icon></span>
+         <span (click)="alert(cautela,'atencao')" ion-fab  mini color="light"><ion-icon color="yell" name="md-alert"></ion-icon></span>
+         <span (click)="alert(cautela,'reuniao')" ion-fab  mini color="light"><ion-icon color="primary" name="md-contacts"></ion-icon></span>
+         <span (click)="alert(cautela,true)" ion-fab mini color="light" ><ion-icon color="secondary" name="thumbs-up"></ion-icon></span>
+        </ion-row>
+     </ion-item>
+     <ion-item-divider no-lines color="blueDark" style="text-align:center">Aprovadores</ion-item-divider>
+     <ion-list *ngIf="cautela != null">
+        <ion-item style="background-color: rgba(255, 255, 255, 0); color: white" *ngFor="let aprovador of aprovadores">
+          <ion-avatar item-start>
+            <img src="{{aprovador.imagem}}">
+          </ion-avatar>
+          <h2>{{aprovador.nome}}</h2>
+          <p style="color: white">Setor: {{aprovador.setor}}</p>
+          <p style="color: white">Cargo: {{aprovador.cargo}}</p>
+          <ion-icon item-end [color]="aprovador.aprovado" name="md-disc"></ion-icon> 
+          <p *ngIf="aprovador.obs && aprovador.obs != false" style="color:white" >Obs: {{aprovador.obs}}</p>
+        </ion-item>
+    </ion-list>
+    </div>
+
+      <form *ngIf="editar == true  && modulo.update == true" [formGroup]="signupForm_edit" novalidate>
+          <ion-item style="background-color: rgba(255, 255, 255, 0); color: white">
+            <ion-label style="color: white" stacked>Titulo2</ion-label>
+            <ion-input formControlName="titulo_edit" value="{{cautela_edit.titulo}}" type="text" placeholder="Titulo" [class.invalid]="!signupForm_edit.controls.titulo_edit.valid && blur">
+            </ion-input>
+          </ion-item>
+          <ion-item style="background-color: rgba(255, 255, 255, 0); color: white" class="error-message" *ngIf="!signupForm_edit.controls.titulo_edit.valid
+                               && signupForm_edit.controls.titulo_edit.dirty">
+            <p style="color: white" >Por favor informe um titulo com até 30 caracteres</p>
+          </ion-item>
+
+          <ion-item style="background-color: rgba(255, 255, 255, 0); color: white">
+              <ion-label style="color: white">Data</ion-label>
+              <ion-datetime placeholder="{{cautela_edit.data}}" ngModel="{{cautela_edit.data}}"  formControlName="data_edit"  displayFormat="DD-MM-YYYY" pickerFormat="DD-MM-YYYY" min="2018" max="2028" doneText="ok" cancelText="cancelar">
+              </ion-datetime>
+          </ion-item>
+
+          <ion-item style="background-color: rgba(255, 255, 255, 0); color: white">
+              <ion-label style="color: white">Setor</ion-label>
+              <ion-select ngModel="{{cautela_edit.setor}}" placeholder="{{cautela_edit.setor}}" formControlName="setor_edit">
+                <ion-option *ngFor="let setor of setores" value="{{setor}}">{{setor}}</ion-option>
+              </ion-select> 
+          </ion-item>
+
+          <ion-item-divider no-lines style="text-align:center" color="blueDark">Itens</ion-item-divider>
+
+          <ion-item  style="background-color: rgba(255, 255, 255, 0); color: white" (click)="addItem()">
+              <ion-icon color="light" name="add" item-end></ion-icon>
+              Adicionar Item
+          </ion-item>
+          <ion-list>
+            <ion-item-sliding *ngFor="let item2 of cautela_edit.items" (ionSwipe)="deletarItem_edit(item2)">
+              <ion-item>
+                <h2>{{item2.id}}</h2>
+                <p>{{item2.descricao}}</p>
+                <h2 item-end>R${{item2.valor}}</h2> 
+                <p item-end> {{item2.quantidade}} unid </p>
+              </ion-item>
+              <ion-item-options side="right">
+                <button ion-button expandable color="danger" (click)="deletarItem_edit(item2)">Deletar</button>
+              </ion-item-options>
+            </ion-item-sliding>
+            <ion-item style="color: white" color="blueDark" no-lines *ngIf="cautela_edit.total != null">
+              <h2>Total</h2>
+              <h2 item-end>R${{cautela_edit.total}}</h2>
+            </ion-item>
+          </ion-list>
+            <button id="center2" color="blueDark" ion-button round large (click)="Editar()" [disabled]="!signupForm_edit.valid">
+                Editar cautela
+            </button> 
+        </form>
+</ion-content>

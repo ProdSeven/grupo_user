@@ -1,0 +1,75 @@
+page-login {
+    
+    form {
+margin-bottom: 32px;
+button {
+margin-top: 20px !important;
+}
+}
+p {
+font-size: 0.8em;
+color: #d2d2d2;
+}
+.invalid {
+border-bottom: 1px solid #ff6153;
+}
+.error-message {
+min-height: 2.2rem;
+p {
+font-size: 60%;
+}
+ion-label {
+margin: 2px 0;
+}
+item-inner { border-bottom: 0 !important;
+}
+}
+
+.fundo{
+	
+	background:url(../assets/images/fundo_app_meta.png) no-repeat center center fixed;
+    background-size: cover;
+
+}
+
+#center2{
+    
+    display: flex;
+    justify-content: center;
+    width: 100%;
+        
+}
+
+.logo{
+    height:140px;
+    width: 200px;
+}
+
+#log{
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+    height: auto;
+    width: auto;
+}
+
+#linha{
+    margin-top: 10px;
+    background-color: white;
+    height: 1px;
+    width: 100px;
+}
+
+#fundo_login{
+    margin: 0px;
+    background: linear-gradient(#151f45 ,#DE3338); /* Standard syntax (must be last) */
+}
+
+#centroTotal{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+}

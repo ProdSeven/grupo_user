@@ -1,0 +1,264 @@
+<ion-header no-border>
+    <ion-navbar color="cinza">
+      <ion-row text-center>
+          <ion-title *ngIf="tipo == 'tarefaC' && tipo != null" class="Titulo" text-center >Tarefa</ion-title>
+          <ion-title *ngIf="tipo == 'Mtarefa' && tipo != null" class="Titulo" text-center >Subtarefa</ion-title>
+          <button (click)="voltar()" item-end color="danger" ion-button clear item-end icon-only>
+              <ion-icon name='md-close'></ion-icon>
+          </button>
+      </ion-row>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content id="app_fundo_cinza">
+
+<div *ngIf="tipo == 'tarefaC' && tipo != null && tarefa != null && participantes != null && subtarefas != null">
+    <ion-grid *ngIf="modulo != null" class="edit" id="centroTI">
+        <ion-row id="centroTI">
+            <ion-col>
+                <ion-fab *ngIf="modulo.delete == true" bottom>
+                        <button (click)="delTarefa()" ion-fab color="blueDark"><ion-icon color="danger" name="md-trash"></ion-icon></button>
+                </ion-fab>
+            </ion-col>
+            <ion-col>
+                <ion-fab *ngIf="modulo.arquivar == true" bottom>
+                        <button (click)="arquivar()" ion-fab color="{{!tarefa.arquivada}}"><ion-icon name="md-archive"></ion-icon></button>
+                </ion-fab>
+            </ion-col>
+            <ion-col>
+                <ion-fab *ngIf="modulo.arquivar == true" bottom>
+                        <button (click)="parar()" ion-fab color="{{!tarefa.parada}}">
+                            <ion-icon *ngIf="tarefa.parada" name="md-play"></ion-icon>
+                            <ion-icon *ngIf="!tarefa.parada" name="md-pause"></ion-icon>
+                        </button>
+                </ion-fab>
+            </ion-col>
+            <ion-col>
+                <ion-fab *ngIf="modulo.update == true" bottom>
+                        <button (click)="editar()" ion-fab color="blueDark"><ion-icon name="md-create"></ion-icon></button>
+                </ion-fab>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="tarefa != null" class="identar">
+        <ion-row id="letraBranca">
+            <ion-col col-12>
+                <p>
+                    <a class="titulo" >Titulo:</a><br>
+                    <span id="letraclara">{{tarefa.titulo}}</span><br><br>
+                    <a class="titulo" >Descrição:</a><br>
+                    <span id="letraclara">{{tarefa.desc}}</span><br><br>
+                    <a class="titulo" >Data de inicio:</a><br>
+                    <span id="letraclara">{{tarefa.dataI}}</span><br><br>
+                    <a class="titulo" >Data de fim:</a><br>
+                    <span id="letraclara">{{tarefa.dataF}}</span><br><br>
+                    <a class="titulo" >Status da Tarefa:</a><br>
+                    <span id="letraclara">{{tarefa.status}}</span>
+                </p>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-item-divider no-lines text-center color="blueDark">Participantes</ion-item-divider>
+    <div text-center id="letraBranca" *ngIf="participantes.length == 0">
+        <br>
+        Ainda não há participantes
+    </div>
+    <br *ngIf="participantes.length == 0">
+    <div *ngIf="participantes != null">
+
+        <ion-list *ngFor="let participante of participantes" inset>
+                <ion-grid>
+                    <div class="itens">
+                        <div class="itens2" align-items-center>
+                                <div id="x">
+                                    <ion-thumbnail id="thumb" item-start>
+                                        <img src="{{participante.imagem}}">
+                                    </ion-thumbnail>
+                                </div>
+                            <ion-row text-center>
+                                <ion-col>
+                                    <p>
+                                        <a id="subTitulo">{{participante.nome}}</a><br>
+                                        <a > {{participante.email}} </a>
+                                    </p>
+                                </ion-col>
+                            </ion-row>
+                        </div>
+                        <div id="divisor" ></div>
+                        <br>
+                        <div class="itens2" text-center>
+                            <ion-row id="letraGrande">
+                                <ion-col>
+                                    <span >Setor: {{participante.setor}}</span>
+                                </ion-col>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <ion-col>
+                                    <span >Cargo: {{participante.cargo}}</span>
+                                </ion-col>  
+                            </ion-row>
+                        </div>
+                        <br>
+                    </div>
+                  </ion-grid>
+            </ion-list>
+
+    </div>
+    <ion-item-divider no-lines text-center color="blueDark">Subtarefas</ion-item-divider>
+    <div text-center id="letraBranca" *ngIf="subtarefas.length == 0">
+        <br>
+        Ainda não há subtarefas
+    </div>
+    <br *ngIf="subtarefas.length == 0">
+    <ion-list *ngFor="let sub of subtarefas" inset>
+        <ion-grid (click)="subTarefaInfo(sub,'Mtarefa')">
+            <div class="itens">
+                <div class="itens2" align-items-center>
+                    <ion-row text-center>
+                        <ion-col>
+                            <p>
+                                <a id="subTitulo">{{sub.titulo}}</a><br>
+                                <a  *ngIf="sub.participantes != null"> {{sub.participantes.length}} participantes </a>
+                                <a  *ngIf="sub.participantes == null">não há participantes </a><br>
+                                <ion-icon *ngIf="sub.status == 'parada'" color="danger" name="md-play"></ion-icon>
+                                <ion-icon *ngIf="sub.status == 'não iniciada'" color="dark" name="md-play"></ion-icon>
+                                <ion-icon *ngIf="sub.status == 'iniciada'" color="secondary" name="md-pause"></ion-icon>
+                                <ion-icon *ngIf="sub.status == 'arquivada'" color="danger" name="md-archive"></ion-icon>
+                                <ion-icon *ngIf="sub.status == 'concluida'" color="primary" name="md-done-all"></ion-icon>
+                            </p>
+                        </ion-col>
+                    </ion-row>
+                </div>
+                <div id="divisor" ></div>
+                <br>
+                <div class="itens2" text-center>
+                    <ion-row id="letraGrande">
+                        <ion-col>
+                            <span id="letraVerde">inicio:{{sub.dataI}}</span>
+                        </ion-col>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <ion-col>
+                            <span id="letraVermelha">fim:{{sub.dataF}}</span>
+                        </ion-col>  
+                    </ion-row>
+                </div>
+                <br>
+            </div>
+        </ion-grid>
+    </ion-list>
+    <br><br><br><br>
+</div>
+
+
+
+
+<div *ngIf="tipo == 'Mtarefa' && tipo != null && tarefa != null && participantes != null && subtarefas != null">
+        <ion-grid *ngIf="modulo != null" class="edit">
+                <ion-row >
+                    <div id="centroTI2">
+                        <ion-col >
+                                <ion-fab *ngIf="tarefa.status != 'não iniciada' && tarefa.status != 'concluida' " bottom>
+                                        <button (click)="arquivarSub()" ion-fab color="danger"><ion-icon name="md-archive"></ion-icon></button>
+                                </ion-fab>
+                        </ion-col>
+                        <ion-col>
+                            <ion-fab bottom>
+                                    <button *ngIf="tarefa.status == 'não iniciada'" (click)="pararSub()" ion-fab color="dark">
+                                        <ion-icon name="md-play"></ion-icon>
+                                    </button>
+                                    <button *ngIf="tarefa.status == 'parada'" (click)="pararSub()" ion-fab color="danger">
+                                        <ion-icon name="md-play"></ion-icon>
+                                    </button>
+                                    <button *ngIf="tarefa.status == 'iniciada'" (click)="pararSub()" ion-fab color="secondary">
+                                        <ion-icon name="md-pause"></ion-icon>
+                                    </button>
+                            </ion-fab>
+                        </ion-col>
+                        <ion-col>
+                            <ion-fab *ngIf="tarefa.status == 'iniciada'" bottom>
+                                    <button (click)="finalizar()" ion-fab color="primary"><ion-icon name="md-done-all"></ion-icon></button>
+                            </ion-fab>
+                            <ion-fab *ngIf="tarefa.status == 'concluida'" bottom>
+                                    <button (click)="finalizar()" ion-fab color="secondary"><ion-icon name="md-done-all"></ion-icon></button>
+                            </ion-fab>
+                        </ion-col>
+                    </div>
+                </ion-row>
+        </ion-grid>
+        <ion-grid *ngIf="tarefa != null" class="identar">
+            <ion-row id="letraBranca">
+                <ion-col col-12>
+                    <p>
+                        <a class="titulo" >Titulo:</a><br>
+                        <span id="letraclara">{{tarefa.titulo}}</span><br><br>
+                        <a class="titulo" >Descrição:</a><br>
+                        <span id="letraclara">{{tarefa.desc}}</span><br><br>
+                        <a class="titulo" >Data de inicio:</a><br>
+                        <span id="letraclara">{{tarefa.dataI}}</span><br><br>
+                        <a class="titulo" >Data de fim:</a><br>
+                        <span id="letraclara">{{tarefa.dataF}}</span><br><br>
+                        <a class="titulo" >Status da Tarefa:</a><br>
+                        <span id="letraclara">{{tarefa.status}}</span>
+                    </p>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-item-divider no-lines text-center color="blueDark">Participantes</ion-item-divider>
+        <div text-center id="letraBranca" *ngIf="participantes.length == 0">
+            <br>
+            Ainda não há participantes
+        </div>
+        <br *ngIf="participantes.length == 0">
+        <div *ngIf="participantes != null">
+
+            <ion-list *ngFor="let participante of participantes" inset>
+                <ion-grid>
+                    <div class="itens">
+                        <div class="itens2" align-items-center>
+                                <div id="x">
+                                    <ion-thumbnail id="thumb" item-start>
+                                        <img src="{{participante.imagem}}">
+                                    </ion-thumbnail>
+                                </div>
+                            <ion-row text-center>
+                                <ion-col>
+                                    <p>
+                                        <a id="subTitulo">{{participante.nome}}</a><br>
+                                        <a > {{participante.email}} </a>
+                                    </p>
+                                </ion-col>
+                            </ion-row>
+                        </div>
+                        <div id="divisor" ></div>
+                        <br>
+                        <div class="itens2" text-center>
+                            <ion-row id="letraGrande">
+                                <ion-col>
+                                    <span >Setor: {{participante.setor}}</span>
+                                </ion-col>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <ion-col>
+                                    <span >Cargo: {{participante.cargo}}</span>
+                                </ion-col>  
+                            </ion-row>
+                        </div>
+                        <br>
+                    </div>
+                  </ion-grid>
+            </ion-list>
+            <br><br><br><br>
+            
+        </div>
+            
+    </div>
+
+    <div *ngIf="tarefa == null && participantes == null && subtarefas == null"  id="centro">
+        <ion-spinner id="spinner" color="light"  name="ios-small"></ion-spinner><br>
+    </div>
+    <div style="color: white;" *ngIf="tarefa == null && participantes == null && subtarefas == null"  id="centro">
+        CARREGANDO...
+    </div>
+    
+
+</ion-content>

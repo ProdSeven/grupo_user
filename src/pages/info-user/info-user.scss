@@ -1,0 +1,47 @@
+page-info-user {
+    .circleMenuInfo{
+        display: flex;
+        justify-content: center;
+        width: 100%; 
+    }
+    #fundoFoto{
+        height: auto;
+        background: linear-gradient(#DE3338 ,#151f45);
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        align-items: center;
+        width: auto;
+        box-shadow: 0 2px 13px rgba(0, 0, 0, 0.7);
+    }
+    #fotoInfo{
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 2px 13px rgba(0, 0, 0, 0.7);  
+    }
+    #voltar-info{
+        margin-left: 7px;
+    }
+    #save-info{
+        margin-right: 7px;
+    }
+    #voltar{
+        height: 25px;
+        width: 25px;
+    }
+    #nome{
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        align-items: center;
+    }
+    #fotoNome{
+        color: white;
+    }
+    #pText{
+        line-height: 1.3;
+        text-align: center;
+    }
+}

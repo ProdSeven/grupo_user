@@ -1,0 +1,101 @@
+// http://ionicframework.com/docs/theming/
+
+
+.circleMenu {
+    margin-left: 21%;
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+#foto{
+	height: 150px;
+    width: 150px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 4px;
+	margin-right: auto;
+	box-shadow: 0 2px 13px rgba(0, 0, 0, 0.7);
+}
+
+#app_fundo{
+	background: linear-gradient(#151f45 ,#DE3338); /* Standard syntax (must be last) */
+}
+
+#app_fundo_cinza{
+	background-color: darkgray;
+}
+
+#refresher_app{
+	background: linear-gradient(#fff ,rgba(10, 23, 55, 0)); /* Standard syntax (must be last) */
+}
+
+#centro{
+    
+	display: flex;
+	justify-content: center;
+	width: 100%;
+		
+}
+
+#spinner{
+  width: 100px;
+  height: 100px;
+}
+
+#menu{
+	height: 30px;
+	width: 35px;
+}
+ 
+#menu-item{
+	margin-top: 7px;
+	margin-left: 7px;
+}
+
+a:link { 
+	text-decoration:none; 
+} 
+
+#logo_menu{
+	height: 150px;
+	width: 180px;
+	margin-bottom: -80px;
+	margin-top: 10px;
+}
+
+#semCor{
+	background-color: rgba(10, 23, 55, 0);
+}
+
+#letraBranca{
+	color: white;
+}
+
+#linhaApp{
+    background-color: white;	
+    height: 1px;
+    width: 100%;
+}
+
+.modalSheet{
+	height: 50%;
+	margin-bottom: 1px;
+}
+
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.

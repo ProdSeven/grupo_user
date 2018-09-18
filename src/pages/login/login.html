@@ -1,0 +1,52 @@
+<ion-content  padding id="fundo_login">
+  <div id="centroTotal">
+  <ion-card id="log" style="background-color: rgba(10, 23, 55, 0);">
+      <div id="center2">
+          <img class="logo" src="assets/images/logo_grupoMeta_mono.png"/> 
+      </div>
+      <ion-card-content>
+          <form [formGroup]="loginForm" (submit)="loginUser()" novalidate>
+              <ion-item style="background-color: rgba(10, 23, 55, 0);color: white">
+                <ion-label color="light" stacked>Email</ion-label>
+                <ion-input color="light" formControlName="email" type="email"
+                       placeholder="Seu email"
+                       [class.invalid]="!loginForm.controls.email.valid && blur">
+                </ion-input>
+              </ion-item>
+              <ion-item style="background-color: rgba(10, 23, 55, 0);color: white" class="error-message" *ngIf="!loginForm.controls.email.valid &&
+                                   loginForm.controls.email.dirty">
+                <p id="letraBranca">Por favor informe um email válido.</p>
+              </ion-item>
+              <ion-item style="background-color: rgba(10, 23, 55, 0);color: white">
+                <ion-label color="light" stacked>Senha</ion-label>
+                  <ion-input color="light" formControlName="password" type="password"
+                   placeholder="sua senha"
+                   [class.invalid]="!loginForm.controls.password.valid && blur">
+                  </ion-input>
+              </ion-item>
+              <ion-item style="background-color: rgba(10, 23, 55, 0);color: white"   class="error-message" *ngIf="!loginForm.controls.password.valid
+                                   && loginForm.controls.password.dirty">
+                <p id="letraBranca">A senha precisa conter mais de 6 caracteres.</p>
+              </ion-item>
+              <button color="blueDark" ion-button block type="submit" [disabled]="!loginForm.valid">
+                Entrar
+              </button>
+            </form>
+            <ion-row id="center2">
+                <div id="linha"></div>
+                &nbsp; &nbsp;
+                <h2 style="color:white">OU</h2>
+                &nbsp; &nbsp;
+                <div id="linha"></div>
+            </ion-row>
+            <button style="color: white" ion-button block clear (click)="goToSignup()">
+                Criar conta
+            </button> 
+            <button style="color: white" ion-button block clear (click)="goToResetPassword()">
+              Esqueci minha senha :(
+            </button>
+      </ion-card-content>
+  </ion-card>
+</div>
+
+</ion-content>

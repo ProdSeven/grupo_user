@@ -1,0 +1,34 @@
+ 
+<ion-content (pan)="panEvent($event)"  id="fundoitem">
+  <div id="voltar" (click)="voltar()"></div>
+  <div *ngIf="item != null" padding id="modalSheet_item">
+      <ion-grid>
+          <ion-row>
+            <ion-col col-12><h3 text-center>{{item.id}}</h3></ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col col-12><p text-center>{{item.descricao}}</p></ion-col>
+          </ion-row>
+          <div id="divisor"></div>
+          <ion-row>
+            <ion-col id="center2" col-6>
+              <p>Valor</p>
+            </ion-col>
+            <ion-col id="center2" col-6>
+              <p>Quantidade</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col id="center2" col-6>
+              <h2 text-center>R${{item.valor}}</h2>
+            </ion-col>
+            <ion-col id="center2" col-6>
+              <h2 text-center>{{item.quantidade}} unid</h2>
+            </ion-col>
+          </ion-row>
+      </ion-grid>
+        <div id="center2">
+            <button bottom color="light" ion-fab><ion-icon ios="ios-create" md="md-create"></ion-icon></button>
+        </div>
+  </div>
+</ion-content>

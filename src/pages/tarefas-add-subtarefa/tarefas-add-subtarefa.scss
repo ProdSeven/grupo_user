@@ -1,0 +1,94 @@
+page-tarefas-add-subtarefa {
+    #myInput {
+        width: calc(100% - 10px);
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: white;
+    }
+
+    .edit{
+        position: fixed;
+        z-index: 101; 
+        bottom: 5px;
+    }
+    
+    .pesq{
+        position: fixed;
+        z-index: 101; 
+    }
+
+    #letraVermelha{
+        color: red;
+    }
+
+    #letraVerde{
+        color: green;
+    }
+
+    .itens{
+        background-color: white;
+        text-align: center;
+        border: 2px;
+        border-radius: 10px;
+    }
+
+    .itens2{
+        border: 2px;
+        border-radius: 10px;
+        background-color: white;
+        padding: 0 20px 0 20px;
+        text-align: center;
+    }
+    
+    #subTitulo{
+        font-size: 20px;
+        color: black;
+    }
+
+    p{
+        color: blue;
+    }
+
+    #divisor{
+        background-color: rgb(187, 187, 187);	
+        height: 1px;
+        width: 100%;
+    }
+    
+    #letraGrande{
+        font-size: 15px;
+    }
+
+    #x{ 
+        padding: 10px 0 0 0;
+        background-color: transparent;
+        width: 100%;
+        height: 40px;
+        border: 2px;
+        border-radius: 10px 10px 0px 0px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+        height: auto;
+    }
+
+    #Xicon{
+        background-color: red;
+        width: 100%;
+        height: 40px;
+        border: 2px;
+        border-radius: 10px 10px 0px 0px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #thumb{
+        width: 100px;
+        height: 100px;
+    }
+}

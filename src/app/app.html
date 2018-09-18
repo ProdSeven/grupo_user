@@ -1,0 +1,80 @@
+<ion-menu  [content]="content">
+    <ion-content id="app_fundo">
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+            <ion-refresher-content
+            id="refresher_app"
+            pullingIcon="ios-arrow-up"
+            refreshingSpinner="ios"
+            refreshingText="Atualizando..."
+            ></ion-refresher-content>
+        </ion-refresher>
+        <ion-list>
+      <ion-item no-lines *ngIf="user != null && perfil != null" style="background-color: rgba(0, 0, 0, 0)">
+        <div *ngIf="perfil != null" class="circleMenu">
+            <img  id="foto" src="{{perfil.imagem}}">
+        </div>
+        <br>
+        <h2 *ngIf="perfil != null" style="color: white" text-center>{{perfil.nome}}</h2>
+        <p *ngIf="perfil != null && user.emailVerified == true" style="color: rgb(78, 211, 78)" text-center>
+          {{perfil.email}}
+          <ion-icon color="secondary" name="ios-checkmark-circle"></ion-icon>
+        </p>
+        <a *ngIf="perfil != null && user.emailVerified == false" href="https://www.gmail.com/" >
+          <p style="color: rgb(220, 80, 80)" text-center>
+            {{perfil.email}} <br>
+            Verifique seu email
+            <ion-icon color="danger" name="md-alert"></ion-icon>
+          </p> 
+        </a>
+      </ion-item>
+        <ion-list inset *ngIf="perfil == null && user.emailVerified == false && pages != null"> 
+            <ion-item-divider *ngIf="pages.Geral != null && pages.Geral.length != 0" no-lines style="text-align:center" color="blueDark">Geral</ion-item-divider>
+            <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.Geral" (click)="openPage(p)">
+                {{p.title}}
+            </button>
+        </ion-list>
+          <ion-list inset *ngIf="user != null && perfil != null && user.emailVerified != false && pages != null"> 
+              <ion-item-divider *ngIf="pages.Geral != null && pages.Geral.length != 0" no-lines style="text-align:center" color="blueDark">Geral</ion-item-divider>
+              <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.Geral" (click)="openPage(p)">
+                    {{p.title}}
+              </button>
+              <br>
+              <ion-item-divider *ngIf="pages.Secretaria != null && pages.Secretaria.length != 0" no-lines style="text-align:center" color="blueDark">Secretaria</ion-item-divider>
+              <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.Secretaria" (click)="openPage(p)">
+                    {{p.title}}
+              </button>
+              <br>
+              <ion-item-divider *ngIf="pages.Administrativo != null && pages.Administrativo.length != 0" no-lines style="text-align:center" color="blueDark">Administrativo</ion-item-divider>
+              <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.Administrativo" (click)="openPage(p)">
+                      <ion-badge *ngIf='caut_pa_noti != 0 && p.title == "Cautela"' color="danger" >{{caut_pa_noti}}</ion-badge>
+                      {{p.title}}
+              </button>
+              <br>
+              <ion-item-divider *ngIf="pages.GTI != null && pages.GTI.length != 0" no-lines style="text-align:center" color="blueDark">GTI</ion-item-divider>
+              <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.GTI" (click)="openPage(p)">
+                      {{p.title}}
+              </button>
+              <div *ngIf="user.emailVerified != null && pages.Geral != null">
+                <ion-toolbar transparent>
+                        <button style="background-color: rgba(0, 0, 0, 0);color: white" text-center menuClose ion-item (click)="Sair()">
+                            Sair
+                        </button> 
+                </ion-toolbar>
+              </div>
+          </ion-list>
+      </ion-list>
+
+      <button ion-button full text-center id="letraBranca" *ngIf="perfil != null && user.emailVerified == false" (click)="ReenviarEmail()">
+          Reenviar Email de confirmação
+      </button>
+      <div *ngIf="perfil == null && user.emailVerified != null"  id="centro">
+          <ion-spinner id="spinner" color="light"  name="ios-small"></ion-spinner><br>
+      </div>
+      <div style="color: white;" *ngIf="perfil == null && user.emailVerified != null"  id="centro">
+          CARREGANDO PERFIL
+      </div>
+    </ion-content>
+  </ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

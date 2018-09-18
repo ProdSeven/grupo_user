@@ -1,0 +1,151 @@
+
+<ion-header no-border>
+  <ion-navbar color="cinza">
+    <ion-row>
+        <div id="menu-item">
+            <img menuToggle id="menu" src="assets/images/menu_b.svg"/> 
+        </div>
+        <ion-title text-center >Tarefas</ion-title>
+    </ion-row>
+  </ion-navbar>
+  <ion-searchbar (ionInput)="getTarefas($event)"></ion-searchbar>
+   <ion-item color="blueDark" id="filtro" (click)="Filtro()" no-lines>
+        <ion-label id="letraBranca" item-start >Filtro:</ion-label>
+        <h3 id="letraBranca" item-start>{{filtro}}</h3>
+        <ion-icon color="light" item-start name="md-arrow-dropdown"></ion-icon>
+    </ion-item>
+</ion-header>
+
+<ion-content style="margin: 0px;"  id="app_fundo_cinza">
+    
+    <div id="edit" *ngIf="true">
+        <ion-fab right bottom>
+            <button style="background-color: #0b1b38;" ion-fab color="primary"> <ion-icon ios="ios-arrow-dropleft" md="md-arrow-dropleft"></ion-icon></button>
+            <ion-fab-list side="left">
+              <button (click)="add()" *ngIf="true" ion-fab><ion-icon color="secondary" name="md-add" ></ion-icon></button>
+              <button *ngIf="true" ion-fab><ion-icon name='md-search'></ion-icon></button>
+            </ion-fab-list>
+        </ion-fab>
+    </div>
+
+    <div>
+      <ion-list *ngIf="Mtarefas != null && Mtarefas.length != 0 && (arquivadasPesq.length == 0 && tarefasCPesq.length == 0 && MtarefasPesq.length == 0) && (filtro == 'Todos' || filtro == 'Minhas tarefas')">
+          <ion-item-divider no-lines text-center color="blueDark">Minhas subtarefas</ion-item-divider>
+          <ion-list (click)="tarefaInfo(Mtarefa,'Mtarefa')" *ngFor="let Mtarefa of Mtarefas">
+            <ion-item>
+              <h2>{{Mtarefa.titulo}}</h2>
+              <p>{{Mtarefa.desc}}</p>
+              <ion-icon *ngIf="Mtarefa.status == 'iniciada'" color="secondary" name="md-pause" item-end ></ion-icon>
+              <ion-icon *ngIf="Mtarefa.status == 'não iniciada'" color="dark" name="md-clock" item-end ></ion-icon>
+              <ion-icon *ngIf="Mtarefa.status == 'parada'" color="danger" name="md-play" item-end ></ion-icon>
+              <ion-icon *ngIf="Mtarefa.status == 'arquivada'" color="danger" name="md-archive" item-end ></ion-icon>
+              <ion-icon *ngIf="Mtarefa.status == 'concluida'" color="secondary" name="md-done-all" item-end ></ion-icon>
+            </ion-item>
+            <ion-item>
+                <span id="letraVerde" item-start>inicio:{{Mtarefa.dataI}}</span>
+                <span id="letraVermelha" item-end>fim:{{Mtarefa.dataF}}</span>
+            </ion-item>
+          </ion-list>
+      </ion-list>
+      <ion-list *ngIf="Mtarefas != null && MtarefasPesq.length != 0 && (filtro == 'Todos' || filtro == 'Minhas tarefas')">
+          <ion-item-divider no-lines text-center color="blueDark">Minhas subtarefas</ion-item-divider>
+          <ion-list (click)="tarefaInfo(MtarefaP,'Mtarefa')" *ngFor="let MtarefaP of MtarefasPesq">
+              <ion-item>
+                <h2>{{MtarefaP.titulo}}</h2>
+                <p>{{MtarefaP.desc}}</p>
+                <ion-icon *ngIf="MtarefaP.parada == true" color="{{!MtarefaP.parada}}" name="md-play" item-end ></ion-icon>
+                <ion-icon *ngIf="MtarefaP.parada == false" color="{{!MtarefaP.parada}}" name="md-pause" item-end ></ion-icon>
+              </ion-item>
+              <ion-item>
+                  <span id="letraVerde" item-start>inicio:{{MtarefaP.dataI}}</span>
+                  <span id="letraVermelha" item-end>fim:{{MtarefaP.dataF}}</span>
+              </ion-item>
+          </ion-list>
+      </ion-list>
+
+      <ion-list *ngIf="tarefasC != null && tarefasC.length != 0 && (arquivadasPesq.length == 0 && tarefasCPesq.length == 0 && MtarefasPesq.length == 0)  &&  (filtro == 'Todos' || filtro == 'Tarefas criadas')">
+        <ion-item-divider no-lines text-center color="blueDark">Tarefas criadas</ion-item-divider>
+        <ion-list (click)="tarefaInfo(tarefaC,'tarefaC')" *ngFor="let tarefaC of tarefasC">
+            <ion-item>
+              <h2>{{tarefaC.titulo}}</h2>
+              <p>{{tarefaC.desc}}</p>
+              <ion-icon *ngIf="tarefaC.parada == true" color="{{!tarefaC.parada}}" name="md-play" item-end ></ion-icon>
+              <ion-icon *ngIf="tarefaC.parada == false" color="{{!tarefaC.parada}}" name="md-pause" item-end ></ion-icon>
+            </ion-item>
+            <ion-item>
+                <span id="letraVerde" item-start>inicio:{{tarefaC.dataI}}</span>
+                <span id="letraVermelha" item-end>fim:{{tarefaC.dataF}}</span>
+            </ion-item>
+        </ion-list>
+      </ion-list>
+      <ion-list *ngIf="tarefasC != null && tarefasCPesq.length != 0 && (filtro == 'Todos' || filtro == 'Tarefas criadas')">
+          <ion-item-divider no-lines text-center color="blueDark">Tarefas criadas</ion-item-divider>
+          <ion-list (click)="tarefaInfo(tarefaCP,'tarefaC')" *ngFor="let tarefaCP of tarefasCPesq">
+              <ion-item>
+                <h2>{{tarefaCP.titulo}}</h2>
+                <p>{{tarefaCP.desc}}</p>
+                <ion-icon *ngIf="tarefaCP.parada == true" color="{{!tarefaCP.parada}}" name="md-play" item-end ></ion-icon>
+                <ion-icon *ngIf="tarefaCP.parada == false" color="{{!tarefaCP.parada}}" name="md-pause" item-end ></ion-icon>
+              </ion-item>
+              <ion-item>
+                  <span id="letraVerde" item-start>inicio:{{tarefaCP.dataI}}</span>
+                  <span id="letraVermelha" item-end>fim:{{tarefaCP.dataF}}</span>
+              </ion-item>
+          </ion-list>
+      </ion-list>
+
+      <ion-list *ngIf="arquivadas != null && arquivadas.length != 0 && (arquivadasPesq.length == 0 && tarefasCPesq.length == 0 && MtarefasPesq.length == 0)  &&  (filtro == 'Todos' || filtro == 'Arquivadas')">
+        <ion-item-divider no-lines text-center color="false">Tarefas arquivadas</ion-item-divider>
+        <ion-list (click)="tarefaInfo(arquivada,'tarefaC')" *ngFor="let arquivada of arquivadas">
+            <ion-item>
+              <h2>{{arquivada.titulo}}</h2>
+              <p>{{arquivada.desc}}</p>
+              <ion-icon *ngIf="arquivada.parada == true" color="{{!arquivada.parada}}" name="md-play" item-end ></ion-icon>
+              <ion-icon *ngIf="arquivada.parada == false" color="{{!arquivada.parada}}" name="md-pause" item-end ></ion-icon>
+            </ion-item>
+            <ion-item>
+                <span id="letraVerde" item-start>inicio:{{arquivada.dataI}}</span>
+                <span id="letraVermelha" item-end>fim:{{arquivada.dataF}}</span>
+            </ion-item>
+        </ion-list>
+      </ion-list>
+      <ion-list *ngIf="arquivadas != null && arquivadasPesq.length != 0 && (filtro == 'Todos' || filtro == 'Tarefas criadas')">
+          <ion-item-divider no-lines text-center color="blueDark">Tarefas arquivadas</ion-item-divider>
+          <ion-list (click)="tarefaInfo(tarefaCP,'tarefaC')" *ngFor="let arquivadaP of arquivadaPesq">
+              <ion-item>
+                <h2>{{arquivadaP.titulo}}</h2>
+                <p>{{arquivadaP.desc}}</p>
+                <ion-icon *ngIf="arquivadaP.parada == true" color="{{!arquivadaP.parada}}" name="md-play" item-end ></ion-icon>
+                <ion-icon *ngIf="arquivadaP.parada == false" color="{{!arquivadaP.parada}}" name="md-pause" item-end ></ion-icon>
+              </ion-item>
+              <ion-item>
+                  <span id="letraVerde" item-start>inicio:{{arquivadaP.dataI}}</span>
+                  <span id="letraVermelha" item-end>fim:{{arquivadaP.dataF}}</span>
+              </ion-item>
+          </ion-list>
+      </ion-list>
+      <br><br><br><br>
+     </div>
+      <div *ngIf="arquivadas == null && tarefasC == null && Mtarefas == null"  id="centro">
+        <ion-spinner id="spinner" color="light"  name="ios-small"></ion-spinner><br>
+      </div>
+      <div style="color: white;" *ngIf="arquivadas == null && tarefasC== null && Mtarefas == null"  id="centro">
+        CARREGANDO...
+      </div>
+      <div *ngIf="(arquivadas != null && tarefasC != null && Mtarefas != null ) && (arquivadas.length == 0 && tarefasC.length == 0 && Mtarefas.length == 0)" id="centroTotal">
+        <ion-grid id="centro">
+            <!-- 
+             <ion-row style="position: relative; top: 60px; z-index: 2;" id="centro">
+                    <img class="confetes" src="assets/images/confetes.png">
+                    <img class="confetes" src="assets/images/confetes.png">
+            </ion-row>
+            -->
+            <ion-row style="position: relative; z-index: 5;" id="centro">
+                <div id="vazio" style="color: white;">
+                Parabens, você finalizou todas suas tarefas 
+                </div>
+            </ion-row>
+        </ion-grid>
+      </div>
+</ion-content>
+
