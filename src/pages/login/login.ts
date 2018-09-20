@@ -81,10 +81,10 @@ export class LoginPage {
 			  const password = this.loginForm.value.password;
 		  	this.authProvider.loginUser(email, password).then(authData => {
         console.log("loginUser.user ,", authData.user.uid, ", key ",authData.key);
-        this.firebaseProvider.object("/func_perfil").then(result=>{
+        this.firebaseProvider.object("/user_perfil").then(result=>{
 				console.log("funfou ,", result);
         if(result[authData.user.uid]){
-					console.log("loginUser é funcionario");
+					console.log("loginUser é Aluno");
 					this.loading.dismiss().then(() => {
 					  this.navCtrl.setRoot(HomePage);
 				  });
@@ -94,7 +94,7 @@ export class LoginPage {
 							this.navCtrl.setRoot(LoginPage);
 						});
             const alert: Alert = this.alertCtrl.create({
-              title: 'Entre com uma conta de Funcionário',
+              title: 'Entre com uma conta de Aluno',
               message: "Algumas das suas informações não estão corretas. Por favor, tente novamente.",
               buttons: [{ text: 'Ok', role: 'cancel' }]
             });

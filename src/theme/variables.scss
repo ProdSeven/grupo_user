@@ -37,10 +37,10 @@ $app-direction: ltr;
 $refresher-icon-color: #fff;
 $refresher-text-color: #fff;
 $refresher-border-color: rgba(10, 23, 55, 0);
-$text-input-placeholder-color: #fff;
+$text-input-placeholder-color: rgb(197, 197, 197);
 $spinner-ios-bubbles-color: #fff;
-$datetime-ios-placeholder-color: #fff;
-$datetime-md-placeholder-color: #fff;
+$datetime-ios-placeholder-color: #0b1b38;
+$datetime-md-placeholder-color: #0b1b38;
 $select-md-icon-color: #222;
 $select-md-placeholder-color: #222;
 $select-ios-icon-color: #fff;
@@ -56,6 +56,7 @@ $loading-md-spinner-color: #fff;
 $loading-md-max-width: 500px;
 $loading-md-padding-top: 0;
 $grid-padding-width: 1px !default;
+$text-input-highlight-color-valid:	#105224;
 
 
 $colors: (

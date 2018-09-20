@@ -27,7 +27,7 @@
           </p> 
         </a>
       </ion-item>
-        <ion-list inset *ngIf="perfil == null && user.emailVerified == false && pages != null"> 
+        <ion-list inset *ngIf="perfil == null && user.emailVerified == null && pages != null"> 
             <ion-item-divider *ngIf="pages.Geral != null && pages.Geral.length != 0" no-lines style="text-align:center" color="blueDark">Geral</ion-item-divider>
             <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.Geral" (click)="openPage(p)">
                 {{p.title}}
@@ -38,9 +38,12 @@
               <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.Geral" (click)="openPage(p)">
                     {{p.title}}
               </button>
+              <button *ngIf="user.emailVerified != null && pages.Geral != null" style="background-color: rgba(0, 0, 0, 0);color: white" text-center menuClose ion-item (click)="Sair()">
+                  Sair
+              </button>
               <br>
-              <ion-item-divider *ngIf="pages.Secretaria != null && pages.Secretaria.length != 0" no-lines style="text-align:center" color="blueDark">Secretaria</ion-item-divider>
-              <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.Secretaria" (click)="openPage(p)">
+              <ion-item-divider *ngIf="pages.SIM != null && pages.SIM.length != 0" no-lines style="text-align:center" color="blueDark">SIM</ion-item-divider>
+              <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.SIM" (click)="openPage(p)">
                     {{p.title}}
               </button>
               <br>
@@ -54,13 +57,6 @@
               <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.GTI" (click)="openPage(p)">
                       {{p.title}}
               </button>
-              <div *ngIf="user.emailVerified != null && pages.Geral != null">
-                <ion-toolbar transparent>
-                        <button style="background-color: rgba(0, 0, 0, 0);color: white" text-center menuClose ion-item (click)="Sair()">
-                            Sair
-                        </button> 
-                </ion-toolbar>
-              </div>
           </ion-list>
       </ion-list>
 

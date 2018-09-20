@@ -126,7 +126,7 @@ export class CriarContaPage {
                 imagemuid:this.imageuid,
                 modulos:modulos,
                 nome:nome,
-                perfil:"func",
+                perfil:"user",
                 setor:setor,  
                 telefone: telefone
               }

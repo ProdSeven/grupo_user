@@ -4,7 +4,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { FIREBASE_CREDENTIALS } from './credentials_firebase';
 import { HomePage } from '../pages/home/home';
-import { LoginPage } from '../pages/login/login'
 import firebase from 'firebase';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import { AutenticacaoProvider } from '../providers/autenticacao/autenticacao';
@@ -34,14 +33,14 @@ export class MyApp {
     firebase.initializeApp(FIREBASE_CREDENTIALS);
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
-        this.firebaseProvider.refOff("/func_perfil/"+user);
-        this.firebaseProvider.refOff("/func_perfil/"+user+"/cautelas_pa/");
+        this.firebaseProvider.refOff("/user_perfil/"+user);
+        this.firebaseProvider.refOff("/user_perfil/"+user+"/cautelas_pa/");
         this.firebaseProvider.refOff("/administrativo/cautelas");
         this.pages = [];
         let geral = [
-          { title: 'Login', component: LoginPage, cesso: true },
+          { title: 'Login', component: 'login', cesso: true },
           { title: 'Criar conta', component: CriarContaPage, cesso: true },
-          { title: 'Esqueci minha senha', component: LoginPage, acesso: true }
+          { title: 'Esqueci minha senha', component: 'login', acesso: true }
         ];
         this.pages.Geral = geral;
         this.nome = null;
@@ -51,7 +50,7 @@ export class MyApp {
         this.imagen = null;
         this.caut_pa_noti = 0;
         this.authProvider.logoutUser();
-        this.rootPage = LoginPage; 
+        this.rootPage = 'login'; 
         console.log("não tem gente logada ", this.rootPage);
         //unsubscribe();
       }else{
@@ -69,9 +68,9 @@ export class MyApp {
   AtualizarStatus(){
     this.firebaseProvider.getuser().then(user=>{
       console.log("user: ",user);
-      this.firebaseProvider.refOn("/func_perfil/"+user).on("value", userProfileSnapshot => {
+      this.firebaseProvider.refOn("/user_perfil/"+user).on("value", userProfileSnapshot => {
         if(userProfileSnapshot.val()){
-          console.log("func_perfil: ",userProfileSnapshot.val());
+          console.log("user_perfil: ",userProfileSnapshot.val());
           this.nome = userProfileSnapshot.val().nome;
           this.perfil = userProfileSnapshot.val();
           this.email = userProfileSnapshot.val().email;
@@ -83,14 +82,15 @@ export class MyApp {
             console.log("pages: ",this.pages); 
           });
         }else{
-          this.firebaseProvider.refOff("/func_perfil/"+user);
-          this.firebaseProvider.refOff("/func_perfil/"+user+"/cautelas_pa/");
+          console.log("usuario nao encontrado em uer_perfil");
+          this.firebaseProvider.refOff("/user_perfil/"+user);
+          this.firebaseProvider.refOff("/user_perfil/"+user+"/cautelas_pa/");
           this.firebaseProvider.refOff("/administrativo/cautelas");
           this.pages = [];
           let geral = [
-            { title: 'Login', component: LoginPage, cesso: true },
+            { title: 'Login', component: 'login', cesso: true },
             { title: 'Criar conta', component: CriarContaPage, cesso: true },
-            { title: 'Esqueci minha senha', component: LoginPage, acesso: true }
+            { title: 'Esqueci minha senha', component: 'login', acesso: true }
           ];
           this.pages["Geral"] = geral;
           this.nome = null;
@@ -100,7 +100,7 @@ export class MyApp {
           this.imagen = null;
           this.caut_pa_noti = 0;
           this.authProvider.logoutUser();
-          this.rootPage = LoginPage;
+          this.rootPage = 'login';
         }
         });
     });
@@ -108,7 +108,7 @@ export class MyApp {
 
      cautelas_paOn(user){
       console.log("cautelas_pa/app:",user);
-      this.firebaseProvider.refOn("/func_perfil/"+user+"/cautelas_pa/").on("value",(userProfileSnapshot:any)=>{
+      this.firebaseProvider.refOn("/user_perfil/"+user+"/cautelas_pa/").on("value",(userProfileSnapshot:any)=>{
         let result = userProfileSnapshot;
         this.caut_pa_noti = 0;
         console.log("userProfileSnapshot length: ",userProfileSnapshot.val());
@@ -131,9 +131,9 @@ export class MyApp {
       this.firebaseProvider.getuser().then(user=>{
         console.log("user: ",user);
         if(user != "Erro"){
-        this.firebaseProvider.refOn("/func_perfil/"+user).once("value", userProfileSnapshot => {
+        this.firebaseProvider.refOn("/user_perfil/"+user).once("value", userProfileSnapshot => {
           if(userProfileSnapshot.val()){
-            console.log("func_perfil: ",userProfileSnapshot.val());
+            console.log("user_perfil: ",userProfileSnapshot.val());
             this.nome = userProfileSnapshot.val().nome;
             this.perfil = userProfileSnapshot.val();
             this.email = userProfileSnapshot.val().email;
@@ -144,7 +144,7 @@ export class MyApp {
               this.pages = page;
               console.log("pages: ",this.pages);
 
-            this.firebaseProvider.refOn("/func_perfil/"+user+"/cautelas_pa/").on("value",(userProfileSnapshot:any)=>{
+            this.firebaseProvider.refOn("/user_perfil/"+user+"/cautelas_pa/").on("value",(userProfileSnapshot:any)=>{
               let result = userProfileSnapshot;
               this.caut_pa_noti = 0;
               console.log("userProfileSnapshot length: ",userProfileSnapshot.val());
@@ -155,14 +155,15 @@ export class MyApp {
             });
             });
           }else{
-            this.firebaseProvider.refOff("/func_perfil/"+user);
-            this.firebaseProvider.refOff("/func_perfil/"+user+"/cautelas_pa/");
+            console.log("usuario nao encontrado em uer_perfil");
+            this.firebaseProvider.refOff("/user_perfil/"+user);
+            this.firebaseProvider.refOff("/user_perfil/"+user+"/cautelas_pa/");
             this.firebaseProvider.refOff("/administrativo/cautelas");
             this.pages = [];
             let geral = [
-              { title: 'Login', component: LoginPage, cesso: true },
+              { title: 'Login', component: 'login', cesso: true },
               { title: 'Criar conta', component: CriarContaPage, cesso: true },
-              { title: 'Esqueci minha senha', component: LoginPage, acesso: true }
+              { title: 'Esqueci minha senha', component: 'login', acesso: true }
             ];
             this.pages["Geral"] = geral;
             this.nome = null;
@@ -172,7 +173,7 @@ export class MyApp {
             this.imagen = null;
             this.caut_pa_noti = 0;
             this.authProvider.logoutUser();
-            this.rootPage = LoginPage;
+            this.rootPage = 'login';
             refresher.complete();
           }
           },error=>{
@@ -225,14 +226,14 @@ export class MyApp {
           text: 'Sim',
           handler: () => {
             this.firebaseProvider.getuser().then(user=>{
-            this.firebaseProvider.refOff("/func_perfil/"+user);
-            this.firebaseProvider.refOff("/func_perfil/"+user+"/cautelas_pa/");
+            this.firebaseProvider.refOff("/user_perfil/"+user);
+            this.firebaseProvider.refOff("/user_perfil/"+user+"/cautelas_pa/");
             this.firebaseProvider.refOff("/administrativo/cautelas");
             this.pages = [];
             let geral = [
-              { title: 'Login', component: LoginPage, cesso: true },
+              { title: 'Login', component: 'login', cesso: true },
               { title: 'Criar conta', component: CriarContaPage, cesso: true },
-              { title: 'Esqueci minha senha', component: LoginPage, acesso: true }
+              { title: 'Esqueci minha senha', component: 'login', acesso: true }
             ];
             this.pages["Geral"] = geral;
             this.nome = null;

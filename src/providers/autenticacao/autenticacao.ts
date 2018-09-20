@@ -74,7 +74,7 @@ constructor() {}
 						setor:singup.setor,  
 						telefone:singup.telefone };
 		  console.log("infos: ", infos);
-          firebase.database().ref(`/func_perfil/${newUser.user.uid}`).set(infos).then(()=>{
+          firebase.database().ref(`/user_perfil/${newUser.user.uid}`).set(infos).then(()=>{
 																				var user = firebase.auth().currentUser;
 																				user.sendEmailVerification().then(function(){
 																					
@@ -88,7 +88,7 @@ constructor() {}
 
 	getModulos(){
 		return new Promise((resolve,reject)=>{
-			firebase.database().ref("config/modulos").once("value",modulos=>{
+			firebase.database().ref("config/modulos_user").once("value",modulos=>{
 				resolve(modulos.val());
 			},error=>{
 				console.log("error: ", error);

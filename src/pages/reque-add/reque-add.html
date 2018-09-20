@@ -1,0 +1,77 @@
+<ion-header>
+    <ion-navbar color="navBar">
+            <ion-row>
+                <div id="menu-item">
+                <img menuToggle id="menu" src="assets/images/menu_b.svg"/>
+                </div>
+                <ion-title text-center>Requerimento</ion-title>
+            </ion-row>
+    </ion-navbar>
+  </ion-header>
+  
+   
+  <ion-content  id="app_fundo_cinza">
+      <form [formGroup]="signupForm" novalidate> 
+          <ion-list>
+          <ion-item style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label floating color="blueDark" >Acadêmico(a):</ion-label>
+              <ion-input [ngModel]="infoUser.nome" color="blueDark" formControlName="academico" type="text" placeholder="Seu nome" [class.invalid]="!signupForm.controls.academico.valid && blur">
+            </ion-input>
+          </ion-item>
+          <ion-item style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label floating color="blueDark" >Endereço:</ion-label>
+              <ion-input [ngModel]="infoUser.endereco" color="blueDark" formControlName="endereco" type="text" placeholder="Endereço, Nº, Bairro" [class.invalid]="!signupForm.controls.endereco.valid && blur">
+            </ion-input>
+          </ion-item>
+          <ion-item style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label floating color="blueDark" >CEP:</ion-label>
+              <ion-input [ngModel]="infoUser.cep" color="blueDark" formControlName="cep" type="text" placeholder="CEP" [class.invalid]="!signupForm.controls.cep.valid && blur">
+            </ion-input>
+          </ion-item>
+          <ion-item style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label floating color="blueDark" >Telefone:</ion-label>
+              <ion-input [ngModel]="infoUser.telefone" color="blueDark" formControlName="telefone" type="number" placeholder="Telefone" [class.invalid]="!signupForm.controls.telefone.valid && blur">
+            </ion-input>
+          </ion-item>
+          <ion-item style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label floating color="blueDark" >Curso:</ion-label>
+              <ion-input [ngModel]="infoUser.curso" color="blueDark" formControlName="curso" type="text" placeholder="Curso" [class.invalid]="!signupForm.controls.curso.valid && blur">
+            </ion-input>
+          </ion-item>
+          <ion-item style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label floating color="blueDark" >Semestre:</ion-label>
+              <ion-input [ngModel]="infoUser.semestre" color="blueDark" formControlName="semestre" type="number" placeholder="Curso" [class.invalid]="!signupForm.controls.semestre.valid && blur">
+            </ion-input>
+          </ion-item>
+          <ion-item style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label floating color="blueDark" >Turma:</ion-label>
+              <ion-input color="blueDark" formControlName="turma" type="text" placeholder="Turma" [class.invalid]="!signupForm.controls.turma.valid && blur">
+            </ion-input>
+          </ion-item>
+          <ion-item style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label floating color="blueDark" >Turno:</ion-label>
+              <ion-input [ngModel]="infoUser.turno" color="blueDark" formControlName="turno" type="text" placeholder="Turno" [class.invalid]="!signupForm.controls.turno.valid && blur">
+            </ion-input>
+          </ion-item>
+          <!--
+          <ion-item [class.invalid]="!signupForm.controls.ano.valid && blur" style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label color="blueDark">Ano:</ion-label>
+            <ion-datetime color="blueDark" formControlName="ano" placeholder="DD-MM-YYYY" displayFormat="DD-MM-YYYY" pickerFormat="DD-MM-YYYY" min="2018" max="2028" doneText="ok" cancelText="cancelar">
+            </ion-datetime>
+          </ion-item>
+          -->
+          <br>
+          <div id="corpoRow">
+            <h5 id="corpo">VENHO ATRAVÉS DESTE RESPEITOSAMENTE REQUERER:</h5>
+            <textarea #myInput formControlName="corpo" id="myInput" rows="7" (keyup)="resize()"></textarea>
+          </div>
+        </ion-list>
+          <div class="edit" id="centro">
+            <ion-fab bottom>
+                <button ion-fab (click)="addReque()" color="blueDark" [disabled]="!signupForm.valid"><ion-icon name="md-checkmark"></ion-icon></button>
+            </ion-fab>
+          </div>
+        </form>
+        <br><br>
+        <br><br>
+  </ion-content>

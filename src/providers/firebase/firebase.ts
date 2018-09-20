@@ -17,7 +17,7 @@ export class FirebaseProvider {
   menuItns(id){
     return new Promise((resolve, reject)=>{
       let list:any = [];
-			firebase.database().ref("func_perfil/"+id+"/modulos").once("value",userProfileSnapshot=>{
+			firebase.database().ref("user_perfil/"+id+"/modulos").once("value",userProfileSnapshot=>{
         let result = userProfileSnapshot;
         console.log("menuItns/userProfileSnapshot: ",userProfileSnapshot.val());
         firebase.database().ref("config/setores").once("value",setoresSnap=>{
@@ -173,6 +173,36 @@ export class FirebaseProvider {
 			}
 		
 		let dataNow = dia +"/"+ mes +"/"+ ano + "-" + horas + ":" + minutos + ":" + segundos;
+		return dataNow;
+  }
+  
+  Hora(){
+		let horas:any = new Date().getHours();
+		let minutos:any = new Date().getMinutes();
+			if(horas < 10){
+				horas = "0" + horas;
+			}
+			if(minutos < 10){
+				minutos = "0" + minutos;
+			}
+		
+    let dataNow:any = horas + ":" + minutos;
+		return dataNow;
+  }
+
+  Dia(){
+		let ano:any = new Date().getFullYear();
+		let mes:any = new Date().getMonth() + 1;
+		let dia:any = new Date().getDate();
+		
+			if(mes < 10){
+				mes = "0" + mes;
+			}
+			if(dia < 10){
+				dia = "0" + dia;
+			}
+		
+		let dataNow:any = dia +"-"+ mes +"-"+ ano;
 		return dataNow;
 	}
 
