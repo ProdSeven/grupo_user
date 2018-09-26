@@ -5,12 +5,12 @@
   Ionic pages and navigation.
 -->
 <ion-header no-border>
-  <ion-navbar color="cinza">
+  <ion-navbar color="navBar">
     <ion-row text-center>
-        <button (click)="voltar()" color="danger" ion-button clear item-start icon-only>
+        <button (click)="voltar()" style="z-index:100" color="danger" ion-button clear item-start icon-only>
             <ion-icon name='md-close'></ion-icon>
         </button>
-        <ion-title text-center>Requerimento</ion-title>
+        <ion-title text-center style="margin-left: -30px;">Requerimento</ion-title>
     </ion-row>
   </ion-navbar>
   <ion-segment *ngIf="!encaminhar" color="dark" style="background-color: darkgray;" [(ngModel)]="seg">

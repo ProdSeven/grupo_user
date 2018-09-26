@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, Platform, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Platform, ViewController, AlertController } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { BackgroundMode } from '@ionic-native/background-mode';
@@ -24,6 +24,9 @@ export class RequePage {
   infoUser:any = [];
   requerimentos:any = null;
   requePesq = null;
+  filtro = "Todos";
+  requeSnap = null;
+  situacoes = ["Todos","enviado","espera","encaminhado","deferido","indeferido","aberto","andamento"];
   @ViewChild('myInput') myInput: ElementRef;
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -32,7 +35,8 @@ export class RequePage {
               private modalCtrl: ModalController,
               private platform: Platform,
               private viewCtrl: ViewController,
-              private backgroundMode: BackgroundMode
+              private backgroundMode: BackgroundMode,
+              private alertCtrl: AlertController
               ) {
   this.signupForm = this.formBuilder.group({
     academico: ["",
@@ -79,16 +83,72 @@ export class RequePage {
 
   requeOn(){
     this.firebaseProvider.getuser().then((user:any)=>{
-          this.firebaseProvider.refOn("SIM/requerimentos/").orderByChild('idAcad').equalTo(user).on("value",requeSnap=>{
-            this.firebaseProvider.TransformList(requeSnap).then(reques=>{
-              console.log("reques: ", reques);
-              this.requerimentos = reques;
-            });
-          });
+      this.firebaseProvider.refOn("SIM/requerimentos/").orderByChild('idAcad').equalTo(user).on("value",requeSnap=>{
+        this.requeSnap = requeSnap;
+        console.log("reques: ",requeSnap.val());
+        this.requeOrder(requeSnap);
+      });
     });
   }
 
+  requeOrder(requeSnap){
+    this.requerimentos = [];
+        this.firebaseProvider.TransformList(requeSnap).then(reques=>{
+          console.log("reques: ",reques);
+          this.firebaseProvider.inverteArray(reques).then((requesOrder:any)=>{
+            console.log("requesOrder: ",requesOrder);
+            for (let j = 0; j < requesOrder.length; j++) {
+              if(requesOrder[j].situacao == this.filtro || this.filtro == "Todos"){
+                this.requerimentos.push(requesOrder[j]);
+              }
+              if(j == this.requeOrder.length-1){
+                console.log("requerimentos: ",this.requerimentos);
+              }
+            }
+          });
+        });
+  }
+
   ionViewDidLeave(){
+  }
+
+  Filtro() {
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Filtro');
+
+    for (let i = 0; i < this.situacoes.length; i++) {
+      console.log("situacoes:",this.situacoes[i]);
+      alert.addInput({
+        type: 'radio',
+        label: this.ucFirstAllWords(this.situacoes[i]),
+        value: this.Trim(this.situacoes[i]),
+        checked: (this.filtro == this.situacoes[i])
+      });
+    }
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'OK',
+      handler: data => {
+        this.filtro = data;
+        console.log("filtro: ",this.filtro);
+        if (this.requeSnap != null) {
+          this.requeOrder(this.requeSnap);
+        }
+      }
+    });
+    alert.present();
+  }
+
+  ucFirstAllWords(str){
+    return str.substr(0,1).toUpperCase()+str.substr(1);
+  }
+
+  Trim(vlr) {
+    while(vlr.indexOf(" ") != -1){
+      vlr = vlr.replace(" ", "");
+    }
+    return vlr;
   }
 
   userOn(){

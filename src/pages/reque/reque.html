@@ -1,11 +1,19 @@
-<ion-header>
+<ion-header no-border>
   <ion-navbar color="navBar">
-          <ion-row>
-              <div id="menu-item">
-              <img menuToggle id="menu" src="assets/images/menu_b.svg"/>
-              </div>
-              <ion-title text-center>Requerimento</ion-title>
-          </ion-row>
+    <ion-row>
+        <div style="z-index:100" id="menu-item" >
+            <img menuToggle id="menu" src="assets/images/menu_b.svg"/> 
+        </div>
+        <ion-title text-center style="margin-left:-50px;" >Requerimentos</ion-title>
+    </ion-row>
+    <div id="centro">
+        <ion-row>
+            <button style="color:white" ion-button (click)="Filtro()" clear item-end icon-only>
+                    {{filtro}}<ion-icon color="light" name="md-funnel"></ion-icon> 
+            </button>
+        </ion-row>
+    </div>
+    <ion-searchbar (ionInput)="getUsers($event)"></ion-searchbar>
   </ion-navbar>
 </ion-header>
 
@@ -16,8 +24,7 @@
           <button ion-fab (click)="addReque()" color="blueDark" ><ion-icon name="md-add"></ion-icon></button>
       </ion-fab>
     </div>
-
-    <ion-searchbar (ionInput)="getUsers($event)"></ion-searchbar>
+    
     <ion-list *ngIf="requePesq != null">
       <ion-list *ngFor="let requerimento of requePesq" inset>
           <ion-grid (click)="requeInfo(requerimento)">

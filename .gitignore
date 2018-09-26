@@ -10,6 +10,7 @@ log.txt
 *.sublime-project
 *.sublime-workspace
 .vscode/
+*.apk
 npm-debug.log*
 
 .idea/
@@ -28,6 +29,8 @@ plugins/
 plugins/android.json
 plugins/ios.json
 www/
+src/credentials_firebase.ts
+minha-chave.keystore
 $RECYCLE.BIN/
 
 .DS_Store

@@ -235,4 +235,14 @@ export class FirebaseProvider {
 		return dataNow;
   }
 
+  inverteArray(array){
+    return new Promise((resolve,reject)=>{
+      let result = [];
+      for (let i = array.length - 1; i >= 0 ; i--) {
+        result.push(array[i]);
+      }
+      resolve(result);
+    });
+  }
+
 }

@@ -44,11 +44,7 @@ export class RequeInfoPage {
   }
 
   voltar(){
-    if (this.encaminhar) {
-      this.encaminhar = false;
-    }else{
       this.viewCtrl.dismiss();
-    }
   }
 
   setoresOn(){
