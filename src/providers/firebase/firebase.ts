@@ -204,6 +204,35 @@ export class FirebaseProvider {
 		
 		let dataNow:any = dia +"-"+ mes +"-"+ ano;
 		return dataNow;
-	}
+  }
+  
+  fila(){
+		let ano:any = new Date().getFullYear();
+		let mes:any = new Date().getMonth() + 1;
+		let dia:any = new Date().getDate();
+		let horas:any = new Date().getHours();
+		let minutos:any = new Date().getMinutes();
+		let segundos:any = new Date().getSeconds();
+		
+			if(mes < 10){
+				mes = "0" + mes;
+			}
+			if(dia < 10){
+				dia = "0" + dia;
+			}
+			if(horas < 10){
+				horas = "0" + horas;
+			}
+			if(minutos < 10){
+				minutos = "0" + minutos;
+			}
+			if(segundos < 10){
+				segundos = "0" + segundos;
+			}
+		
+    let dataNow:any = ano +""+mes+""+dia+""+horas +""+ minutos;
+    dataNow = parseInt(dataNow);
+		return dataNow;
+  }
 
 }

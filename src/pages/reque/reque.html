@@ -16,6 +16,86 @@
           <button ion-fab (click)="addReque()" color="blueDark" ><ion-icon name="md-add"></ion-icon></button>
       </ion-fab>
     </div>
+
+    <ion-searchbar (ionInput)="getUsers($event)"></ion-searchbar>
+    <ion-list *ngIf="requePesq != null">
+      <ion-list *ngFor="let requerimento of requePesq" inset>
+          <ion-grid (click)="requeInfo(requerimento)">
+              <div class="itens">
+                  <div class="itens2" align-items-center>
+                      <ion-row text-center>
+                          <ion-col>
+                              <p>
+                                  <a id="subTitulo">{{requerimento.academico}}</a><br>
+                                  Encaminhado para o setor {{requerimento.setor}}<br><br>
+                                  <ion-icon *ngIf="requerimento.situacao == 'enviado'" color="primary" name="md-mail"></ion-icon>
+                                  <ion-icon *ngIf="requerimento.situacao == 'aberto'" color="primary" name="md-mail-open"></ion-icon>
+                                  <ion-icon *ngIf="requerimento.situacao == 'encaminhado'" color="primary" name="md-send"></ion-icon>
+                                  <ion-icon *ngIf="requerimento.situacao == 'andamento'" color="primary" name="md-sync"></ion-icon>
+                                  <ion-icon *ngIf="requerimento.situacao == 'espera'" color="primary" name="md-pause"></ion-icon>
+                                  <ion-icon *ngIf="requerimento.situacao == 'deferido'" color="secondary" name="md-checkmark-circle"></ion-icon>
+                                  <ion-icon *ngIf="requerimento.situacao == 'indeferido'" color="danger" name="md-close-circle"></ion-icon>
+                              </p>
+                          </ion-col>
+                      </ion-row>
+                  </div>
+                  <div id="divisor" ></div>
+                  <br>
+                  <div class="itens2" text-center>
+                      <ion-row id="letraGrande">
+                          <ion-col>
+                              <span id="letraVerde">{{requerimento.dia}},{{requerimento.hora}}</span>
+                          </ion-col>
+                      </ion-row>
+                  </div>
+                  <br>
+              </div>
+          </ion-grid>
+      </ion-list>
+      <h6 *ngIf="requePesq.length == 0 " id="vazio">Sem resposta para sua pesquisa</h6>
+    </ion-list>
+    <ion-list *ngIf="requePesq == null">
+      <ion-list *ngFor="let requerimento of requerimentos" inset>
+        <ion-grid (click)="requeInfo(requerimento)">
+            <div class="itens">
+                <div class="itens2" align-items-center>
+                    <ion-row text-center>
+                        <ion-col>
+                            <p>
+                                <a id="subTitulo">{{requerimento.academico}}</a><br>
+                                Encaminhado para o setor {{requerimento.setor}}<br><br>
+                                <ion-icon *ngIf="requerimento.situacao == 'enviado'" color="primary" name="md-mail"></ion-icon>
+                                <ion-icon *ngIf="requerimento.situacao == 'aberto'" color="primary" name="md-mail-open"></ion-icon>
+                                <ion-icon *ngIf="requerimento.situacao == 'encaminhado'" color="primary" name="md-send"></ion-icon>
+                                <ion-icon *ngIf="requerimento.situacao == 'andamento'" color="primary" name="md-sync"></ion-icon>
+                                <ion-icon *ngIf="requerimento.situacao == 'espera'" color="primary" name="md-pause"></ion-icon>
+                                <ion-icon *ngIf="requerimento.situacao == 'deferido'" color="secondary" name="md-checkmark-circle"></ion-icon>
+                                <ion-icon *ngIf="requerimento.situacao == 'indeferido'" color="danger" name="md-close-circle"></ion-icon>
+                            </p>
+                        </ion-col>
+                    </ion-row>
+                </div>
+                <div id="divisor" ></div>
+                <br>
+                <div class="itens2" text-center>
+                    <ion-row id="letraGrande">
+                        <ion-col>
+                            <span id="letraVerde">{{requerimento.dia}},{{requerimento.hora}}</span>
+                        </ion-col>
+                    </ion-row>
+                </div>
+                <br>
+            </div>
+        </ion-grid>
+      </ion-list>
+    </ion-list>
+      <div *ngIf="requerimentos == null"  id="centro">
+          <ion-spinner id="spinner" color="light"  name="ios-small"></ion-spinner><br>
+      </div>
+      <div style="color: white;" *ngIf="requerimentos == null"  id="centro">
+          CARREGANDO PERFIL
+      </div>
+
       <br><br>
       <br><br>
 </ion-content>

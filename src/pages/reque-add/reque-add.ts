@@ -111,17 +111,13 @@ export class RequeAddPage {
       this.signupForm.value.hora = hora;
       this.signupForm.value.setor = "SIM";
       this.signupForm.value.situacao = "enviado";
+      this.signupForm.value.fila = this.firebaseProvider.fila();
     console.log("singupForm: ",this.signupForm.value);
-    this.signupForm.value.aprovacoes = {
-      SIM:"pendente",
-      coordenacao:"pendente",
-      direcao:"pendente",
-      financeiro:"pendente"
-    };
     let id = this.generateUUID();
     this.signupForm.value.id = id;
     console.log("signupForm.value: ",this.signupForm.value); 
     this.firebaseProvider.getuser().then(user=>{
+      this.signupForm.value.idAcad = user;
       this.firebaseProvider.set("SIM/requerimentos/"+this.signupForm.value.id,this.signupForm.value).then(()=>{
         this.firebaseProvider.update("user_perfil/"+user+"/requerimentos/"+this.signupForm.value.id,{id:this.signupForm.value.id}).then(()=>{
           console.log("this.signupForm.value: ",this.signupForm.value);
