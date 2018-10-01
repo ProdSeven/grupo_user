@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.meta.aluno" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Grupo Meta</name>
+<widget id="io.ionic.meta.aluno" version="0.1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Grupo Meta Aluno</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
@@ -20,8 +20,10 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="30000000" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="orientation" value="portrait" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <preference name="loadUrlTimeoutValue" value="700000" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
         <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />

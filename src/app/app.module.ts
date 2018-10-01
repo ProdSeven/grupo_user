@@ -13,6 +13,7 @@ import { AutenticacaoProvider } from '../providers/autenticacao/autenticacao';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { Camera } from '@ionic-native/camera';
+import { Keyboard } from '@ionic-native/keyboard';
  
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { Camera } from '@ionic-native/camera';
     AutenticacaoProvider,
     AndroidPermissions,
     BackgroundMode,
-    Camera
+    Camera,
+    Keyboard
   ]
 })
 export class AppModule {}

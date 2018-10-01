@@ -19,6 +19,7 @@ import { CriarContaPage } from '../criar-conta/criar-conta';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Observable } from 'rxjs/Observable';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
+import { Keyboard } from '@ionic-native/keyboard';
 
 @IonicPage({
   name: 'login'
@@ -32,6 +33,7 @@ export class LoginPage {
     public loginForm: FormGroup;
     public loading: Loading;
     public user;
+    teclado = {'margin-top':'0px'};
     
     
   constructor(public navCtrl: NavController,
@@ -45,9 +47,18 @@ export class LoginPage {
 			        public platform: Platform,
 				      private backgroundMode: BackgroundMode,
               private toastCtrl: ToastController,
-              private firebaseProvider : FirebaseProvider) {
+              private firebaseProvider : FirebaseProvider,
+              private keyboard: Keyboard) {
 
 				this.platform.ready().then(() => {
+          this.keyboard.onKeyboardShow().subscribe(status=>{
+            this.teclado = {'margin-top':'200px'};
+            console.log("abriu o teclado");
+          });
+          this.keyboard.onKeyboardHide().subscribe(status=>{
+            this.teclado = {'margin-top':'0px'};
+            console.log("abriu o teclado");
+          });
 					this.platform.registerBackButtonAction(() => {
 						if(!this.viewCtrl.enableBack()) { 
 							this.backgroundMode.moveToBackground();
