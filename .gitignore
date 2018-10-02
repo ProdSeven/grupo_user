@@ -29,9 +29,9 @@ plugins/
 plugins/android.json
 plugins/ios.json
 www/
-src/app/credentials_firebase.ts
-minha-chave.keystore
+*.keystore
 $RECYCLE.BIN/
+src/app/credentials_firebase.js
 
 .DS_Store
 Thumbs.db
