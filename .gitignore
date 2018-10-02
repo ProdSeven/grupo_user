@@ -33,6 +33,7 @@ www/
 $RECYCLE.BIN/
 src/app/credentials_firebase.js
 
+
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
