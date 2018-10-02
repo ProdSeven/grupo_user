@@ -61,6 +61,7 @@ export class MyApp {
         this.rootPage = HomePage;
         console.log("tem gente logada ",this.rootPage);
         //unsubscribe();
+        
       }
     });
   }
