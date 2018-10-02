@@ -7,15 +7,10 @@
       <ion-card-content>
           <form [formGroup]="loginForm" (submit)="loginUser()" novalidate>
               <ion-item style="background-color: rgba(10, 23, 55, 0);color: white">
-                <ion-label color="light" stacked>Email</ion-label>
-                <ion-input color="light" formControlName="email" type="email"
-                       placeholder="Seu email"
-                       [class.invalid]="!loginForm.controls.email.valid && blur">
+                <ion-label color="light" stacked>CPF</ion-label>
+                <ion-input color="light" formControlName="cpf" type="cpf"
+                       placeholder="Seu cpf">
                 </ion-input>
-              </ion-item>
-              <ion-item style="background-color: rgba(10, 23, 55, 0);color: white" class="error-message" *ngIf="!loginForm.controls.email.valid &&
-                                   loginForm.controls.email.dirty">
-                <p id="letraBranca">Por favor informe um email válido.</p>
               </ion-item>
               <ion-item style="background-color: rgba(10, 23, 55, 0);color: white">
                 <ion-label color="light" stacked>Senha</ion-label>

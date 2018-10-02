@@ -69,6 +69,7 @@ export class MyApp {
     this.firebaseProvider.getuser().then(user=>{
       console.log("user: ",user);
       this.firebaseProvider.refOn("/user_perfil/"+user).on("value", userProfileSnapshot => {
+        console.log("user_perfil0: ",userProfileSnapshot.val());
         if(userProfileSnapshot.val()){
           console.log("user_perfil: ",userProfileSnapshot.val());
           this.nome = userProfileSnapshot.val().nome;

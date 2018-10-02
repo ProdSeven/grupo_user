@@ -65,42 +65,56 @@
               </div>
           </div>
       </ion-list>
+
       <ion-list *ngSwitchCase="'parecer'">
-              <div *ngIf="requerimento != null && requerimento.parecer">
-                  <div *ngFor="let parecer of requerimento.parecer">
-                      <div *ngIf="parecer.perfil">
-                          <h6 id="subtitulo">{{parecer.setor}}</h6>
-                          <ion-item no-lines>
-                                  <ion-row>
-                                      <ion-col id="centro">
-                                          <ion-avatar item-start>
-                                              <img src="{{parecer.perfil.imagem}}">
-                                          </ion-avatar>
-                                          <p>{{parecer.perfil.nome}} <br> {{parecer.perfil.cargo}}</p>
-                                      </ion-col>
-                                      <ion-col id="centro">
-                                          <strong *ngIf="parecer.status">APROVADO</strong>
-                                          <strong *ngIf="!parecer.status">RECUSADO</strong>
-                                      </ion-col>
-                                  </ion-row>
-                          </ion-item>
-                          <div padding id="corpo">
-                              <div *ngIf="parecer.status">
-                                  <p id="detalheLocal" [ngStyle]="{'border-left': '6px solid green'}">{{parecer.parecer}} <br><br>
-                                  </p>
-                                  <p id="dataParecer" item-end>{{parecer.data}}</p>
-                              </div>
-                              <div *ngIf="!parecer.status">
-                                  <p id="detalheLocal" color="danger" [ngStyle]="{'border-left': '6px solid red'}">{{parecer.parecer}} <br><br>
-                                  </p>
-                                  <p id="dataParecer" item-end>{{parecer.data}}</p>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <h4 id="subtitulo" text-center *ngIf="requerimento != null && !requerimento.parecer">Não há parecer dos setores</h4>
-      </ion-list>
+            <div *ngIf="requerimento != null && requerimento.parecer">
+                <div *ngFor="let parecer of requerimento.parecer">
+                    <div *ngIf="parecer.perfil">
+                        <h6 id="subtitulo">{{parecer.setor}}</h6>
+                        <ion-item no-lines>
+                                <ion-row>
+                                    <ion-col id="centro">
+                                        <ion-avatar item-start>
+                                            <img src="{{parecer.perfil.imagem}}">
+                                        </ion-avatar>
+                                        <p>{{parecer.perfil.nome}} <br> {{parecer.perfil.cargo}}</p>
+                                    </ion-col>
+                                    <ion-col id="centro">
+                                        <strong *ngIf="parecer.status && parecer.status != 'Parecer final'">APROVADO</strong>
+                                        <strong *ngIf="!parecer.status && parecer.status != 'Parecer final'">RECUSADO</strong>
+                                        <strong *ngIf="parecer.status == 'Parecer final' && requerimento.situacao == 'indeferido'">INDEFERIDO</strong>
+                                        <strong *ngIf="parecer.status == 'Parecer final' && requerimento.situacao == 'deferido'">DEFERIDO</strong>
+                                    </ion-col>
+                                </ion-row>
+                        </ion-item>
+                        <div padding id="corpo">
+                            <div *ngIf="parecer.status && parecer.status != 'Parecer final'">
+                                <p id="detalheLocal" [ngStyle]="{'border-left': '6px solid green'}">{{parecer.parecer}} <br><br>
+                                </p>
+                                <p id="dataParecer" item-end>{{parecer.data}}</p>
+                            </div>
+                            <div *ngIf="!parecer.status && parecer.status != 'Parecer final'">
+                                <p id="detalheLocal" color="danger" [ngStyle]="{'border-left': '6px solid red'}">{{parecer.parecer}} <br><br>
+                                </p>
+                                <p id="dataParecer" item-end>{{parecer.data}}</p>
+                            </div>
+                            <div *ngIf="parecer.status == 'Parecer final' && requerimento.situacao == 'deferido'">
+                                <p id="detalheLocal" [ngStyle]="{'border-left': '6px solid green'}">{{parecer.parecer}} <br><br>
+                                </p>
+                                <p id="dataParecer" item-end>{{parecer.data}}</p>
+                            </div>
+                            <div *ngIf="parecer.status == 'Parecer final' && requerimento.situacao == 'indeferido'">
+                                <p id="detalheLocal" color="danger" [ngStyle]="{'border-left': '6px solid red'}">{{parecer.parecer}} <br><br>
+                                </p>
+                                <p id="dataParecer" item-end>{{parecer.data}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 id="subtitulo" text-center *ngIf="requerimento != null && !requerimento.parecer">Não há parecer dos setores</h4>
+    </ion-list>
+
   </div>
   <div *ngIf="requerimento == null"  id="centro">
       <ion-spinner id="spinner" color="light"  name="ios-small"></ion-spinner><br>

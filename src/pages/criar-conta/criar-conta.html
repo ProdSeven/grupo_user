@@ -11,38 +11,59 @@
 
  
 <ion-content padding id="app_fundo">
-    
 
-	<form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
+  <form *ngIf="confirme == true" [formGroup]="ConfirmarForm" (submit)="confirmar()" novalidate>
+      <ion-item  id="semCor">
+        <ion-label id="letraBranca"  stacked>Seu CPF</ion-label>
+        <ion-input id="letraBranca" formControlName="cpf" type="number" placeholder="CPF"></ion-input>
+      </ion-item>
+      <button color="blueDark" ion-button block type="submit" [disabled]="!ConfirmarForm.valid">
+        Confirmar
+      </button>
+  </form>  
+
+	<form *ngIf="confirme == false" [formGroup]="signupForm" (submit)="signupUser()" novalidate>
     <ion-item id="semCor">
         <div id="center">
             <img (click)="presentActionSheet()" id="fotos" src={{imageURL}} />
         </div>
     </ion-item>
     <ion-item id="semCor">
-      <ion-label id="letraBranca"  stacked>Nome completo</ion-label>
-      <ion-input id="letraBranca" formControlName="nome" type="text" placeholder="Seu primeiro nome"></ion-input>
+      <ion-label id="letraBranca" stacked>Nome completo</ion-label>
+      <ion-input id="letraBranca" [ngModel]="UserPerfil.nome" formControlName="nome" type="text" placeholder="Seu primeiro nome"></ion-input>
     </ion-item>
     <ion-item id="semCor">
-      <ion-label id="letraBranca">Setor</ion-label>
-      <ion-select id="letraBranca" formControlName="setor">
-        <ion-option *ngFor="let setor of setores" value="{{setor}}">{{setor}}</ion-option>
-      </ion-select>
+      <ion-label id="letraBranca">CPF</ion-label>
+      <ion-input id="letraBranca" [ngModel]="UserPerfil.cpf" formControlName="cpf" type="number" placeholder="CPF"></ion-input>
     </ion-item>
     <ion-item id="semCor">
-      <ion-label id="letraBranca">Cargo</ion-label>
-      <ion-select id="letraBranca" formControlName="cargo">
-        <ion-option *ngFor="let cargo of cargos" value="{{cargo}}">{{cargo}}</ion-option>
-      </ion-select>
+      <ion-label id="letraBranca"  stacked>Telefone</ion-label>
+      <ion-input id="letraBranca" [ngModel]="UserPerfil.telefone" formControlName="telefone" type="number" placeholder="Seu numero de telefone"></ion-input>
     </ion-item>
     <ion-item id="semCor">
-      <ion-label id="letraBranca"  stacked>Telefone para contato</ion-label>
-      <ion-input id="letraBranca" formControlName="telefone" type="number" placeholder="Seu numero de telefone"></ion-input>
+      <ion-label id="letraBranca"  stacked>Curso</ion-label>
+      <ion-input id="letraBranca" [ngModel]="UserPerfil.curso" formControlName="curso" type="text" placeholder="Seu curso"></ion-input>
     </ion-item>
     <ion-item id="semCor">
-      <ion-label id="letraBranca" stacked>Email</ion-label>
-      <ion-input id="letraBranca" formControlName="email" type="email" placeholder="Seu email" [class.invalid]="!signupForm.controls.email.valid && blur">
-      </ion-input>
+      <ion-label id="letraBranca"  stacked>Semestre</ion-label>
+      <ion-input id="letraBranca" [ngModel]="UserPerfil.semestre" formControlName="semestre" type="text" placeholder="Seu semestre"></ion-input>
+    </ion-item>
+    <ion-item id="semCor">
+      <ion-label id="letraBranca"  stacked>Celular</ion-label>
+      <ion-input id="letraBranca" [ngModel]="UserPerfil.celular" formControlName="celular" type="number" placeholder="Seu numero de celular"></ion-input>
+    </ion-item>
+    <ion-item id="semCor">
+      <ion-label id="letraBranca" stacked>Cep</ion-label>
+      <ion-input id="letraBranca" [ngModel]="UserPerfil.cep" formControlName="cep" type="number" placeholder="Seu Cep">
+    </ion-input>
+    </ion-item>
+    <ion-item id="semCor">
+      <ion-label id="letraBranca" stacked>Endereço</ion-label>
+      <ion-input id="letraBranca" [ngModel]="UserPerfil.endereco" formControlName="endereco" type="text" placeholder="Seu endereço"></ion-input>
+    </ion-item>
+    <ion-item id="semCor">
+      <ion-label id="letraBranca">Email</ion-label>
+      <ion-input id="letraBranca" formControlName="email" type="email" placeholder="Email válido" [class.invalid]="!signupForm.controls.email.valid && blur"></ion-input>
     </ion-item>
     <ion-item id="semCor" class="error-message" *ngIf="!signupForm.controls.email.valid && signupForm.controls.email.dirty">
       <p id="letraBranca">Por favor informe um email válido</p>
@@ -55,7 +76,7 @@
     <ion-item id="semCor" class="error-message" *ngIf="!signupForm.controls.password.valid && signupForm.controls.password.dirty">
       <p id="letraBranca" >A senha precisa conter mais de 6 caracteres.</p>
     </ion-item>
-    <button color="blueDark" ion-button block type="submit" [disabled]="!signupForm.valid">
+    <button color="blueDark" ion-button block type="submit" [disabled]="!signupForm.controls.email.valid || !signupForm.controls.password.valid">
       Criar conta
     </button>
   </form>

@@ -63,6 +63,9 @@
       <button ion-button full text-center id="letraBranca" *ngIf="perfil != null && user.emailVerified == false" (click)="ReenviarEmail()">
           Reenviar Email de confirmação
       </button>
+      <button *ngIf="perfil != null && user.emailVerified == false" style="background-color: rgba(0, 0, 0, 0);color: white" text-center menuClose ion-item (click)="Sair()">
+          Sair
+      </button>
       <div *ngIf="perfil == null && user.emailVerified != null"  id="centro">
           <ion-spinner id="spinner" color="light"  name="ios-small"></ion-spinner><br>
       </div>

@@ -10,6 +10,7 @@ import { resolveDefinition } from '@angular/core/src/view/util';
 @Injectable()
 export class FirebaseProvider {
   user;
+  cpf = null;
   constructor() {
     console.log('Hello FirebaseProvider Provider');
   }
@@ -90,17 +91,42 @@ export class FirebaseProvider {
   refOff(path){
     return firebase.database().ref(path).off();
   }
+
+
   getuser(){
     return new Promise((resolve,reject)=>{
-      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      const unsubscribe = firebase.auth().onAuthStateChanged((user:any) => {
+        console.log("user: ",user.uid);
         if (user) {
-          resolve(user.uid);
-          unsubscribe();
+          firebase.database().ref("user_perfil/").orderByChild("id").equalTo(user.uid).once("value",perfilUser => {
+            this.TransformList(perfilUser).then(userPerfil=>{
+              resolve(userPerfil[0].matricula);
+              unsubscribe();
+            });
+          });
         }else{
           resolve("Erro");
         }
       });
+  }); 
+  }
+
+  getMatricula(cpf){
+    return new Promise((resolve,reject)=>{
+		  	firebase.database().ref("user_perfil/").orderByChild("cpf").equalTo(cpf).once("value",perfilUser => {
+          this.TransformList(perfilUser).then(userPerfil=>{
+            resolve(userPerfil[0]);
+          });
+        });
     }); 
+  }
+
+  setCpf(cpf){
+    this.cpf = cpf;
+  }
+
+  getCpf(){
+    return this.cpf;
   }
 
   TransformList(result){

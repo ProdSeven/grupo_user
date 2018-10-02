@@ -34,6 +34,7 @@ import { LoginPage } from '../login/login';
 export class CriarContaPage {
   public imageURL:any = "assets/images/newUser-b.png";
   public signupForm: FormGroup;
+  public ConfirmarForm: FormGroup;
   cont = false;
   public singup:any = [];
   public imageuid;
@@ -45,6 +46,8 @@ export class CriarContaPage {
   public loading2: Loading;
   cargos:any = [];
   setores:any = [];
+  confirme = true;
+  UserPerfil:any = [];
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               formBuilder: FormBuilder,
@@ -68,16 +71,34 @@ export class CriarContaPage {
     password: ["",
           Validators.compose([Validators.minLength(6), Validators.required])
         ],
-    setor: ["",
-          Validators.compose([Validators.minLength(1), Validators.required])
-        ],
-    cargo: ["",
+    cpf: ["",
           Validators.compose([Validators.minLength(1), Validators.required])
         ],
     nome: ["",
         Validators.compose([Validators.minLength(1), Validators.required])
         ],
+    endereco: ["",
+            Validators.compose([Validators.minLength(1), Validators.required])
+            ],
     telefone: ["",
+            Validators.compose([Validators.minLength(1), Validators.required])
+              ],
+    celular: ["",
+            Validators.compose([Validators.minLength(1), Validators.required])
+             ],
+    cep: ["",
+            Validators.compose([Validators.minLength(1), Validators.required])
+         ],
+    semestre: ["",
+                 Validators.compose([Validators.minLength(1), Validators.required])
+        ],
+    curso: ["",
+                Validators.compose([Validators.minLength(1), Validators.required])
+             ] 
+  });
+  
+  this.ConfirmarForm = formBuilder.group({
+    cpf: ["",
         Validators.compose([Validators.minLength(1), Validators.required])
       ]	 
   });
@@ -95,6 +116,48 @@ export class CriarContaPage {
    });
   }
 
+  confirmar(){
+    if (this.ConfirmarForm.valid) {
+      console.log(String(this.ConfirmarForm.value.cpf));
+      this.firebaseProvider.refOn("user_perfil/").orderByChild('cpf').equalTo(String(this.ConfirmarForm.value.cpf)).once("value",infoUser=>{
+        console.log("infoUser: ",infoUser.val());
+        if(infoUser.val()){
+          console.log(infoUser.val());
+          this.firebaseProvider.TransformList(infoUser).then(User=>{
+            if(User[0].confirmado == false){
+              console.log("User: ",User);
+              let toast = this.toastCtrl.create({
+                message:"Bem vindo "+User[0].nome,
+                duration: 3000
+              });
+              toast.present();
+              this.UserPerfil = User[0];
+              this.confirme = false;
+            }else{
+              let toast = this.toastCtrl.create({
+              message:"Já existe uma conta neste CPF.",
+                duration: 3000
+              });
+              toast.present();
+            }
+          });
+        }else{
+          let alert = this.alertCtrl.create({
+            title:"Usuário não encontrado.",
+            subTitle:"Verifique sua situação finaceira no SIM"
+          });
+          alert.present();
+        }
+      });
+
+    }else{
+      let alert = this.alertCtrl.create({
+        title:"Informe seu CPF"
+      });
+      alert.present();
+    }
+  }
+
 
   cargosOn(){
     this.firebaseProvider.refOn("config/cargos").on("value",(cargos:any)=>{
@@ -107,35 +170,29 @@ export class CriarContaPage {
   
   signupUser(): void {
     console.log("signupUser:",this.signupForm.value);
-		if (!this.signupForm.valid ){
+		if (!this.signupForm.controls.email.valid && !this.signupForm.controls.password.valid ){
 			console.log("Complete o formulário, valor atual: ",this.signupForm.value);
 		}else{
-          this.cont = true;
-          let email: string = this.signupForm.value.email;
-          let password: string = this.signupForm.value.password;
-          let nome: string = this.signupForm.value.nome;
-          let setor: string = this.signupForm.value.setor;
-          let cargo: string = this.signupForm.value.cargo;
-          let telefone: string = this.signupForm.value.telefone;
-          this.authProvider.getModulos().then(modulos=>{
-              this.singup = {
-                cargo:cargo,
-                email:email,
-                senha:password,
-                imagem:this.imageURL,
-                imagemuid:this.imageuid,
-                modulos:modulos,
-                nome:nome,
-                perfil:"user",
-                setor:setor,  
-                telefone: telefone
-              }
+              this.cont = true;
+              let email: string = this.signupForm.value.email;
+              let password: string = this.signupForm.value.password;
+              let nome: string = this.signupForm.value.nome;
+              let setor: string = this.signupForm.value.setor;
+              let cargo: string = this.signupForm.value.cargo;
+              let telefone: string = this.signupForm.value.telefone;
+              this.authProvider.getModulos().then(modulos=>{
+              this.signupForm.value.imagem = this.imageURL;
+              this.signupForm.value.imagemuid = this.imageuid;
+              this.signupForm.value.modulos = modulos;
+              this.signupForm.value.matricula = this.UserPerfil.matricula;
+              this.signupForm.value.password = null;
+              this.signupForm.value.confirmado = true;
               console.log("singup: ", this.singup);
-              this.authProvider.criarConta(this.singup).then( user => {
+              this.authProvider.criarConta(this.signupForm.value,password).then( user => {
                 this.loading.dismiss().then(() => {
                   const confirm = this.alertCtrl.create({
                     title: 'Enviamos um link de confirmação para o seu email '+email,
-                    message: 'para a segurança da sua conta o aplicativo só desbloqueara após a verificação do seu email, após ter efetuado a verificação do seu email reinicie o aplicativo.',
+                    message: 'para a segurança da sua conta o aplicativo só desbloqueara após a verificação do seu email, após a confirmação do email sua conta será liberada.',
                     buttons: [
                     {
                       text: 'Ok',
@@ -146,8 +203,9 @@ export class CriarContaPage {
                     ]
                   });
                   confirm.present();
-
-                  this.navCtrl.setRoot(HomePage);
+                  this.authProvider.logoutUser().then(() => {
+                    this.navCtrl.setRoot(LoginPage);
+                  });
                 });
               },error =>{
                   this.cont = false;

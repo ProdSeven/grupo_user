@@ -60,21 +60,12 @@ constructor() {}
 			return firebase.auth().signInWithEmailAndPassword(email, password);
 	}
   
-  	criarConta(singup): Promise<any> {
-      return firebase.auth().createUserWithEmailAndPassword(singup.email, singup.senha).then(newUser => {
+  	criarConta(singup,password): Promise<any> {
+      return firebase.auth().createUserWithEmailAndPassword(singup.email, password).then(newUser => {
 		  console.log("newUser.user.uid, ",newUser.user.uid);
-		  let infos = { cargo:singup.cargo,
-						email:singup.email,
-						id:newUser.user.uid, 
-						imagem:singup.imagem,
-						imagemuid:singup.imagemuid,
-						modulos:singup.modulos,
-						nome:singup.nome,
-						perfil:singup.perfil,
-						setor:singup.setor,  
-						telefone:singup.telefone };
-		  console.log("infos: ", infos);
-          firebase.database().ref(`/user_perfil/${newUser.user.uid}`).set(infos).then(()=>{
+		  singup.id = newUser.user.uid;
+		  console.log("singup: ", singup);
+          firebase.database().ref(`/user_perfil/${singup.matricula}`).update(singup).then(()=>{
 																				var user = firebase.auth().currentUser;
 																				user.sendEmailVerification().then(function(){
 																					

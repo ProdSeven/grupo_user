@@ -29,7 +29,7 @@ plugins/
 plugins/android.json
 plugins/ios.json
 www/
-src/credentials_firebase.ts
+src/app/credentials_firebase.ts
 minha-chave.keystore
 $RECYCLE.BIN/
 
