@@ -76,7 +76,15 @@
     <ion-item id="semCor" class="error-message" *ngIf="!signupForm.controls.password.valid && signupForm.controls.password.dirty">
       <p id="letraBranca" >A senha precisa conter mais de 6 caracteres.</p>
     </ion-item>
-    <button color="blueDark" ion-button block type="submit" [disabled]="!signupForm.controls.email.valid || !signupForm.controls.password.valid">
+    <ion-item id="semCor">
+      <ion-label id="letraBranca" stacked>Confirmar senha</ion-label>
+        <ion-input id="letraBranca" formControlName="Cpassword" type="password" placeholder="Confirme sua senha" [class.invalid]="!(signupForm.value.Cpassword == signupForm.value.password) && blur">
+    </ion-input>
+    </ion-item>
+    <ion-item id="semCor" class="error-message" *ngIf="!(signupForm.value.Cpassword == signupForm.value.password) && signupForm.controls.Cpassword.dirty">
+      <p id="letraBranca" >As senhas precisam ser identicas.</p>
+    </ion-item>
+    <button color="blueDark" ion-button block type="submit" [disabled]="!signupForm.controls.email.valid || !signupForm.controls.password.valid || !(signupForm.value.Cpassword == signupForm.value.password)">
       Criar conta
     </button>
   </form>

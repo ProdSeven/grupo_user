@@ -14,6 +14,7 @@ import { Platform, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
 import { AutenticacaoProvider } from '../../providers/autenticacao/autenticacao';
+import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../home/home';
 import { CriarContaPage } from '../criar-conta/criar-conta';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
@@ -48,11 +49,12 @@ export class LoginPage {
 				      private backgroundMode: BackgroundMode,
               private toastCtrl: ToastController,
               private firebaseProvider : FirebaseProvider,
-              private keyboard: Keyboard) {
+              private keyboard: Keyboard,
+              private splashScreen: SplashScreen) {
 
 				this.platform.ready().then(() => {
           this.keyboard.onKeyboardShow().subscribe(status=>{
-            this.teclado = {'margin-top':'200px'};
+            this.teclado = {'margin-top':'300px'};
             console.log("abriu o teclado");
           });
           this.keyboard.onKeyboardHide().subscribe(status=>{
@@ -83,6 +85,10 @@ export class LoginPage {
 	  goToResetPassword():void {
 		  
     }
+
+    ionViewDidLoad() {
+      this.splashScreen.hide();
+     }
     
 	  loginUser(): void {
 		  if (!this.loginForm.valid) {
@@ -92,7 +98,8 @@ export class LoginPage {
 			  const password = this.loginForm.value.password;
 		  	this.firebaseProvider.getMatricula(String(cpf)).then((userPerfil:any) => {
           console.log("userPerfil: ", userPerfil);
-          if(userPerfil){
+          if(userPerfil && userPerfil.email != ""){
+            console.log("userPerfil, password: ", userPerfil, password);
             this.firebaseProvider.setCpf(String(cpf));
             this.authProvider.loginUser(userPerfil.email, password).then(authData => {
             console.log("loginUser.user ,", authData.user.uid, ", key ",authData.key);
@@ -123,12 +130,13 @@ export class LoginPage {
             });
           });
         }else{
+          let msg = 'Informações invalidas';
           this.loading.dismiss().then(() => {
             this.authProvider.logoutUser().then(() => {
               this.navCtrl.setRoot(LoginPage);
             });
             const alert: Alert = this.alertCtrl.create({
-              title: 'Entre com uma conta de Aluno',
+              title: msg,
               message: "Algumas das suas informações não estão corretas. Por favor, tente novamente.",
               buttons: [{ text: 'Ok', role: 'cancel' }]
             });

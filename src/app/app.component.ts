@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, AlertController, Loading, LoadingController } from 'ionic-angular';
+import { Nav, Platform, AlertController, Loading, LoadingController, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { FIREBASE_CREDENTIALS } from './credentials_firebase';
@@ -28,11 +28,17 @@ export class MyApp {
               public splashScreen: SplashScreen,
               private firebaseProvider: FirebaseProvider,
               private authProvider: AutenticacaoProvider,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private toastCtrl: ToastController) {
     this.initializeApp(); 
     firebase.initializeApp(FIREBASE_CREDENTIALS);
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
+        // let toast = toastCtrl.create({
+        //   message:"Logout",
+        //   duration:3000
+        // });
+        // toast.present();
         this.firebaseProvider.refOff("/user_perfil/"+user);
         this.firebaseProvider.refOff("/user_perfil/"+user+"/cautelas_pa/");
         this.firebaseProvider.refOff("/administrativo/cautelas");
@@ -54,14 +60,25 @@ export class MyApp {
         console.log("não tem gente logada ", this.rootPage);
         //unsubscribe();
       }else{
-        this.user = user;
-        console.log("email verificado",user.emailVerified);
-        this.cautelas_paOn(user.uid);
-        this.AtualizarStatus();
-        this.rootPage = HomePage;
-        console.log("tem gente logada ",this.rootPage);
-        //unsubscribe();
-        
+          // if(user.emailVerified == false){
+          //   let alert = alertCtrl.create({
+          //     title:"Verifique seu email: "+user.email,
+          //     message:"enviamos um link de confirmação para o seu email, a sua conta será liberada sómente após a confirmação do seu email.",
+          //   });
+          //   alert.present();
+          // }
+          // let toast = toastCtrl.create({
+          //   message:"Login",
+          //   duration:3000
+          // });
+          // toast.present();
+          this.user = user;
+          console.log("email verificado",user.emailVerified);
+          this.cautelas_paOn(user.uid);
+          this.AtualizarStatus();
+          this.rootPage = HomePage;
+          console.log("tem gente logada ",this.rootPage);
+          //unsubscribe();
       }
     });
   }

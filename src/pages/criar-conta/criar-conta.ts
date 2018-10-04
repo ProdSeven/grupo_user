@@ -71,6 +71,9 @@ export class CriarContaPage {
     password: ["",
           Validators.compose([Validators.minLength(6), Validators.required])
         ],
+    Cpassword: ["",
+              Validators.compose([Validators.minLength(6), Validators.required])
+            ],
     cpf: ["",
           Validators.compose([Validators.minLength(1), Validators.required])
         ],
@@ -118,6 +121,12 @@ export class CriarContaPage {
 
   confirmar(){
     if (this.ConfirmarForm.valid) {
+      let loading = this.loadingCtrl.create({
+        spinner: 'ios',
+        duration: 30000
+      });
+      loading.present();
+      let ok = false;
       console.log(String(this.ConfirmarForm.value.cpf));
       this.firebaseProvider.refOn("user_perfil/").orderByChild('cpf').equalTo(String(this.ConfirmarForm.value.cpf)).once("value",infoUser=>{
         console.log("infoUser: ",infoUser.val());
@@ -126,14 +135,18 @@ export class CriarContaPage {
           this.firebaseProvider.TransformList(infoUser).then(User=>{
             if(User[0].confirmado == false){
               console.log("User: ",User);
+              ok = true;
+              loading.dismiss();
               let toast = this.toastCtrl.create({
                 message:"Bem vindo "+User[0].nome,
                 duration: 3000
               });
               toast.present();
-              this.UserPerfil = User[0];
               this.confirme = false;
+              this.UserPerfil = User[0];
             }else{
+              ok = true;
+              loading.dismiss();
               let toast = this.toastCtrl.create({
               message:"Já existe uma conta neste CPF.",
                 duration: 3000
@@ -142,6 +155,8 @@ export class CriarContaPage {
             }
           });
         }else{
+          ok = true;
+          loading.dismiss();
           let alert = this.alertCtrl.create({
             title:"Usuário não encontrado.",
             subTitle:"Verifique sua situação finaceira no SIM"
@@ -149,6 +164,20 @@ export class CriarContaPage {
           alert.present();
         }
       });
+      
+      loading.onDidDismiss(() => {
+        console.log('Ok : ',ok);
+        if(ok == false){
+          let alert = this.alertCtrl.create({
+            title:"Houve um erro na comunicação com o servidor",
+            subTitle:"verifique sua internet",
+          });
+          alert.present();
+        }
+        if(ok == true){
+          console.log("OK");
+        }
+        });
 
     }else{
       let alert = this.alertCtrl.create({
@@ -156,6 +185,7 @@ export class CriarContaPage {
       });
       alert.present();
     }
+    
   }
 
 
@@ -170,9 +200,14 @@ export class CriarContaPage {
   
   signupUser(): void {
     console.log("signupUser:",this.signupForm.value);
-		if (!this.signupForm.controls.email.valid && !this.signupForm.controls.password.valid ){
-			console.log("Complete o formulário, valor atual: ",this.signupForm.value);
-		}else{
+		if (!this.signupForm.controls.email.valid || !this.signupForm.controls.password.valid || !(this.signupForm.value.password == this.signupForm.value.Cpassword)){
+      console.log("Complete o formulário, valor atual: ",this.signupForm.value);
+      const alert2: Alert = this.alertCtrl.create({
+        title:'Preencha as informações corretamente.',
+        buttons: [{ text: "Ok"}]
+      });
+      alert2.present();
+		}else{    
               this.cont = true;
               let email: string = this.signupForm.value.email;
               let password: string = this.signupForm.value.password;
@@ -186,6 +221,7 @@ export class CriarContaPage {
               this.signupForm.value.modulos = modulos;
               this.signupForm.value.matricula = this.UserPerfil.matricula;
               this.signupForm.value.password = null;
+              this.signupForm.value.Cpassword = null;
               this.signupForm.value.confirmado = true;
               console.log("singup: ", this.singup);
               this.authProvider.criarConta(this.signupForm.value,password).then( user => {
@@ -203,9 +239,6 @@ export class CriarContaPage {
                     ]
                   });
                   confirm.present();
-                  this.authProvider.logoutUser().then(() => {
-                    this.navCtrl.setRoot(LoginPage);
-                  });
                 });
               },error =>{
                   this.cont = false;

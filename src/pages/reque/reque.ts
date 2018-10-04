@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ModalController, Platform, ViewCon
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the RequePage page.
@@ -38,6 +39,13 @@ export class RequePage {
               private backgroundMode: BackgroundMode,
               private alertCtrl: AlertController
               ) {
+      this.platform.registerBackButtonAction(() => {
+        if(!this.viewCtrl.enableBack()) { 
+          this.navCtrl.setRoot(HomePage);
+        }else{
+          this.navCtrl.pop();
+        }
+      });
   this.signupForm = this.formBuilder.group({
     academico: ["",
           Validators.compose([Validators.minLength(1), Validators.required])
@@ -211,9 +219,9 @@ export class RequePage {
     modal.onDidDismiss(data => {
       this.platform.registerBackButtonAction(() => {
         if(!this.viewCtrl.enableBack()) { 
-          this.backgroundMode.moveToBackground();
+          this.navCtrl.setRoot(HomePage);
         }else{
-          this.viewCtrl.dismiss();
+          this.navCtrl.pop();
         }
       });
     });

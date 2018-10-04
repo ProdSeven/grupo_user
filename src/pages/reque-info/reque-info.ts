@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController, ToastController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController, ToastController, LoadingController, Platform } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 /**
@@ -34,7 +34,12 @@ export class RequeInfoPage {
               private firebaseProvider: FirebaseProvider,
               private alertCtrl: AlertController,
               private toastCtrl: ToastController,
-              private loadingCtrl: LoadingController) {
+              private loadingCtrl: LoadingController,
+              private platform: Platform) {
+                
+    this.platform.registerBackButtonAction(() => {
+      this.viewCtrl.dismiss();
+  });
                 this.getID();
                 this.setoresOn();
   }

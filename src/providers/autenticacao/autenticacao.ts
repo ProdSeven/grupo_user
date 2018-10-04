@@ -62,9 +62,9 @@ constructor() {}
   
   	criarConta(singup,password): Promise<any> {
       return firebase.auth().createUserWithEmailAndPassword(singup.email, password).then(newUser => {
-		  console.log("newUser.user.uid, ",newUser.user.uid);
-		  singup.id = newUser.user.uid;
-		  console.log("singup: ", singup);
+			console.log("newUser.user.uid, ",newUser.user.uid);
+			singup.id = newUser.user.uid;
+			console.log("singup: ", singup);
           firebase.database().ref(`/user_perfil/${singup.matricula}`).update(singup).then(()=>{
 																				var user = firebase.auth().currentUser;
 																				user.sendEmailVerification().then(function(){

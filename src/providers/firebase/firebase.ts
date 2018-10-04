@@ -29,7 +29,7 @@ export class FirebaseProvider {
               list[setor.val()] = [];
               if(setor.val() == "Geral"){
                 list[setor.val()].push({title:"Home",component:'home',acesso:true});
-                list[setor.val()].push({title:"Perfil",component:'home',acesso:true});
+                //list[setor.val()].push({title:"Perfil",component:'home',acesso:true});
               }
               result.forEach(modulo => {
               if(modulo.val().acesso == true && modulo.val().title != "Home"){
