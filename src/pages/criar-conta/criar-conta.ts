@@ -105,7 +105,10 @@ export class CriarContaPage {
   this.ConfirmarForm = formBuilder.group({
     cpf: ["",
         Validators.compose([Validators.minLength(1), Validators.required])
-      ]	 
+      ],
+    matricula: ["",
+          Validators.compose([Validators.minLength(1), Validators.required])
+        ]	 
   });
   }
 
@@ -129,33 +132,42 @@ export class CriarContaPage {
       });
       loading.present();
       let ok = false;
-      console.log(String(this.ConfirmarForm.value.cpf));
-      this.firebaseProvider.refOn("user_perfil/").orderByChild('cpf').equalTo(String(this.ConfirmarForm.value.cpf)).once("value",infoUser=>{
-        console.log("infoUser: ",infoUser.val());
-        if(infoUser.val()){
-          console.log(infoUser.val());
-          this.firebaseProvider.TransformList(infoUser).then(User=>{
-            if(User[0].confirmado == false){
-              console.log("User: ",User);
-              ok = true;
-              loading.dismiss();
-              let toast = this.toastCtrl.create({
-                message:"Bem vindo "+User[0].nome,
-                duration: 3000
-              });
-              toast.present();
-              this.confirme = false;
-              this.UserPerfil = User[0];
-            }else{
-              ok = true;
-              loading.dismiss();
-              let toast = this.toastCtrl.create({
-              message:"Já existe uma conta neste CPF.",
-                duration: 3000
-              });
-              toast.present();
-            }
-          });
+      console.log(String(this.ConfirmarForm.value.matricula));
+      this.firebaseProvider.refOn("user_perfil/"+this.ConfirmarForm.value.matricula).once("value",User=>{
+          console.log("infoUser: ",User.val());
+          if(User.val()){
+            if(User.val().cpf == parseInt(this.ConfirmarForm.value.cpf)){
+            console.log(User.val());
+              if(User.val().confirmado == false){
+                console.log("User: ",User.val());
+                ok = true;
+                loading.dismiss();
+                let toast = this.toastCtrl.create({
+                  message:"Bem vindo "+User.val().nome,
+                  duration: 3000
+                });
+                toast.present();
+                this.confirme = false;
+                this.UserPerfil = User.val();
+              }else{
+                ok = true;
+                loading.dismiss();
+                let toast = this.toastCtrl.create({
+                message:"Já existe uma conta neste CPF.",
+                  duration: 3000
+                });
+                toast.present();
+              }
+              
+          }else{
+            ok = true;
+            loading.dismiss();
+            let alert = this.alertCtrl.create({
+              title:"Informações incorretas.",
+              subTitle:"Verifique se seu numero de matrícula e seu CPF estão correstos."
+            });
+            alert.present();
+          }
         }else{
           ok = true;
           loading.dismiss();

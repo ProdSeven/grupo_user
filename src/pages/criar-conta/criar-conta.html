@@ -17,6 +17,10 @@
         <ion-label id="letraBranca"  stacked>Seu CPF</ion-label>
         <ion-input id="letraBranca" formControlName="cpf" type="number" placeholder="CPF"></ion-input>
       </ion-item>
+      <ion-item  id="semCor">
+        <ion-label id="letraBranca"  stacked>Seu numero de matrícula</ion-label>
+        <ion-input id="letraBranca" formControlName="matricula" type="text" placeholder="Matricula"></ion-input>
+      </ion-item>
       <button color="blueDark" ion-button block type="submit" [disabled]="!ConfirmarForm.valid">
         Confirmar
       </button>
