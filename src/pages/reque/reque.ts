@@ -176,7 +176,7 @@ export class RequePage {
       modal.onDidDismiss(data => {
         this.platform.registerBackButtonAction(() => {
           if(!this.viewCtrl.enableBack()) { 
-            this.backgroundMode.moveToBackground();
+            this.navCtrl.setRoot(HomePage);
           }else{
               this.navCtrl.pop();
           } 

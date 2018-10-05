@@ -19,6 +19,7 @@ import { Platform, ViewController } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { AutenticacaoProvider } from '../../providers/autenticacao/autenticacao';
 import { LoginPage } from '../login/login';
+import { SplashScreen } from '@ionic-native/splash-screen';
 /**
  * Generated class for the CriarContaPage page.
  *
@@ -60,7 +61,8 @@ export class CriarContaPage {
               private camera: Camera,
               private platform: Platform,
               private viewCtrl: ViewController,
-              private backgroundMode: BackgroundMode){
+              private backgroundMode: BackgroundMode,
+              private splashScreen: SplashScreen){
   this.setoresOn();
   this.cargosOn();
 	this.imageuid = this.generateUUID();
@@ -223,26 +225,16 @@ export class CriarContaPage {
               this.signupForm.value.password = null;
               this.signupForm.value.Cpassword = null;
               this.signupForm.value.confirmado = true;
-              console.log("singup: ", this.singup);
+              console.log("singup: ", this.signupForm.value);
               this.authProvider.criarConta(this.signupForm.value,password).then( user => {
                 this.loading.dismiss().then(() => {
-                  const confirm = this.alertCtrl.create({
-                    title: 'Enviamos um link de confirmação para o seu email '+email,
-                    message: 'para a segurança da sua conta o aplicativo só desbloqueara após a verificação do seu email, após a confirmação do email sua conta será liberada.',
-                    buttons: [
-                    {
-                      text: 'Ok',
-                      handler: () => {
-                      console.log('Ok');
-                      }
-                    }
-                    ]
-                  });
-                  confirm.present();
+                  console.log("splashScreen show");
                 });
               },error =>{
                   this.cont = false;
                   if(error == "Error: The email address is already in use by another account."){
+                    this.signupForm.value.password = password;
+                    this.signupForm.value.Cpassword = password;
                     this.loading.dismiss().then(() => {
                         const alert2: Alert = this.alertCtrl.create({
                         title:'O endereço de e-mail já está sendo usado por outra conta.',
@@ -251,9 +243,11 @@ export class CriarContaPage {
                     alert2.present();
                     });
                   }else{
+                    this.signupForm.value.password = password;
+                    this.signupForm.value.Cpassword = password;
                     this.loading.dismiss().then(() => {
                       const alert2: Alert = this.alertCtrl.create({
-                        title:'Ocorreu algum probelma inesperado, Por favor, tente novamente',
+                        title:'Ocorreu algum probelma inesperado, Por favor, tente novamente (c-C.ts)',
                         subTitle: this.singup,
                         message: error,
                         buttons: [{ text: "Ok", role: "cancel" }]
@@ -263,9 +257,11 @@ export class CriarContaPage {
                   }
                 }).catch(error => {
                     this.cont = false;
+                    this.signupForm.value.password = password;
+                    this.signupForm.value.Cpassword = password;
                     this.loading.dismiss().then(() => {
                       const alert2: Alert = this.alertCtrl.create({
-                          title:'Ocorreu algum probelma inesperado, Por favor, tente novamente',
+                          title:'Ocorreu algum probelma inesperado, Por favor, tente novamente (c-C.ts)',
                           subTitle: this.singup,
                           message: error,
                           buttons: [{ text: "Ok", role: "cancel" }]

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, IonicPage, Platform, ViewController, reorderArray  } from 'ionic-angular';
+import { NavController, IonicPage, Platform, ViewController, reorderArray, ToastController  } from 'ionic-angular';
 import { AutenticacaoProvider } from '../../providers/autenticacao/autenticacao';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { BackgroundMode } from '@ionic-native/background-mode';
@@ -11,16 +11,30 @@ import { ItemSliding } from 'ionic-angular';
 })
 export class HomePage {
   items = [];
+  voltar = false;
   constructor(public navCtrl: NavController,
               private auth: AutenticacaoProvider,
               public splashScreen: SplashScreen,
               private platform: Platform,
               private viewCtrl: ViewController,
-              private backgroundMode: BackgroundMode) {
+              private backgroundMode: BackgroundMode,
+              private toastCtrl: ToastController) {
   this.platform.ready().then(() => {
     this.platform.registerBackButtonAction(() => {
       if(!this.viewCtrl.enableBack()) { 
+        if(this.voltar == false){
+          let toast = toastCtrl.create({
+            message:"pressione o botão voltar mais uma vez para sair do aplicativo",
+            duration:3000
+          });
+          this.voltar = true;
+          toast.present();
+          setTimeout(() => {
+            this.voltar = false;
+          }, 3000);
+        }else{
           this.backgroundMode.moveToBackground();
+        }
       }else{
           this.navCtrl.pop();
       } 
@@ -32,7 +46,7 @@ export class HomePage {
   }
   }
  
-   ionViewDidLoad() {
+  ionViewDidEnter() {
     this.splashScreen.hide();
    }
 

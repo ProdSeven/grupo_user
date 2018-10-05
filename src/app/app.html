@@ -1,6 +1,6 @@
 <ion-menu  [content]="content">
     <ion-content id="app_fundo">
-        <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher *ngIf="user != null && perfil != null && user.emailVerified != null && pages != null" (ionRefresh)="doRefresh($event)">
             <ion-refresher-content
             id="refresher_app"
             pullingIcon="ios-arrow-up"
@@ -33,7 +33,7 @@
                 {{p.title}}
             </button>
         </ion-list>
-          <ion-list inset *ngIf="user != null && perfil != null && user.emailVerified != false && pages != null"> 
+          <ion-list inset *ngIf="user != null && perfil != null && user.emailVerified != null && pages != null"> 
               <ion-item-divider *ngIf="pages.Geral != null && pages.Geral.length != 0" no-lines style="text-align:center" color="blueDark">Geral</ion-item-divider>
               <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.Geral" (click)="openPage(p)">
                     {{p.title}}
@@ -47,16 +47,6 @@
                     {{p.title}}
               </button>
               <br>
-              <ion-item-divider *ngIf="pages.Administrativo != null && pages.Administrativo.length != 0" no-lines style="text-align:center" color="blueDark">Administrativo</ion-item-divider>
-              <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.Administrativo" (click)="openPage(p)">
-                      <ion-badge *ngIf='caut_pa_noti != 0 && p.title == "Cautela"' color="danger" >{{caut_pa_noti}}</ion-badge>
-                      {{p.title}}
-              </button>
-              <br>
-              <ion-item-divider *ngIf="pages.GTI != null && pages.GTI.length != 0" no-lines style="text-align:center" color="blueDark">GTI</ion-item-divider>
-              <button text-center style="background-color: rgba(0, 0, 0, 0);color: white" menuClose ion-item *ngFor="let p of pages.GTI" (click)="openPage(p)">
-                      {{p.title}}
-              </button>
           </ion-list>
       </ion-list>
 

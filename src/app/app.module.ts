@@ -4,6 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home'
+import { LoginPage } from '../pages/login/login';
 import { CriarContaPage } from '../pages/criar-conta/criar-conta'; 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -20,6 +21,7 @@ import { Keyboard } from '@ionic-native/keyboard';
     MyApp,
     HomePage,
     CriarContaPage,
+    LoginPage
   ],
   imports: [ 
     BrowserModule,
@@ -29,7 +31,8 @@ import { Keyboard } from '@ionic-native/keyboard';
   entryComponents: [
     MyApp,
     HomePage,
-    CriarContaPage
+    CriarContaPage,
+    LoginPage
   ],
   providers: [
     StatusBar,

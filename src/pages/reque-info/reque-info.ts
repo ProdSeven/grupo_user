@@ -63,14 +63,28 @@ export class RequeInfoPage {
       this.firebaseProvider.refOn("SIM/requerimentos/"+this.requeId).on("value",requerimeto=>{
         this.requerimento = requerimeto.val();
         if(this.requerimento.parecer){
-          this.firebaseProvider.list("SIM/requerimentos/"+this.requeId+"/parecer").then(parecer=>{
-            this.requerimento.parecer = parecer;
-            for (let i = 0; i < this.requerimento.parecer.length; i++) {
-              this.firebaseProvider.refOn("func_perfil/"+this.requerimento.parecer[i].idFunc).once("value",perfil=>{
-                console.log("perfil: ",perfil.val());
-                this.requerimento.parecer[i].perfil = perfil.val();
-              })
-            }
+          this.firebaseProvider.refOn("SIM/requerimentos/"+this.requeId+"/parecer/").orderByChild('fila').once("value",parecerSnap=>{
+            this.firebaseProvider.TransformList(parecerSnap).then(parecer=>{
+              console.log("parecer: ",parecer);
+              this.firebaseProvider.inverteArray(parecer).then(precerOreder=>{
+                this.requerimento.parecer = precerOreder;
+                  for (let i = 0; i < this.requerimento.parecer.length; i++) {
+                    this.firebaseProvider.refOn("func_perfil/"+this.requerimento.parecer[i].idFunc).once("value",perfil=>{
+                      if(perfil.val()){
+                        console.log("perfil/parecer: ",perfil.val());
+                        this.requerimento.parecer[i].perfil = perfil.val();
+                      }else{
+                        let unknow:any = [];
+                        unknow.nome = "Usuario deletado";
+                        unknow.cargo = "desconhecido";
+                        unknow.imagem = "assets/images/newUser-b.png";
+                        console.log("unknow/parecer: ",unknow);
+                        this.requerimento.parecer[i].perfil = unknow;
+                      }
+                    });
+                  }
+              });
+            });
           });
         }
       });

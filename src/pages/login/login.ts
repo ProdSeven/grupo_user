@@ -22,9 +22,6 @@ import { Observable } from 'rxjs/Observable';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { Keyboard } from '@ionic-native/keyboard';
 
-@IonicPage({
-  name: 'login'
-})
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -34,6 +31,7 @@ export class LoginPage {
     public loginForm: FormGroup;
     public loading: Loading;
     public user;
+    voltar = false;
     teclado = {'margin-top':'0px'};
     
     
@@ -62,8 +60,20 @@ export class LoginPage {
             console.log("abriu o teclado");
           });
 					this.platform.registerBackButtonAction(() => {
-						if(!this.viewCtrl.enableBack()) { 
-							this.backgroundMode.moveToBackground();
+						if(!this.viewCtrl.enableBack()) {  
+              if(this.voltar == false){
+                let toast = toastCtrl.create({
+                  message:"pressione o botão voltar mais uma vez para sair do aplicativo",
+                  duration:3000
+                });
+                this.voltar = true;
+                toast.present();
+                setTimeout(() => {
+                  this.voltar = false;
+                }, 3000);
+              }else{
+                this.backgroundMode.moveToBackground();
+              }
 						}else{
 						this.navCtrl.pop();
 						 } 
@@ -86,7 +96,8 @@ export class LoginPage {
 		  
     }
 
-    ionViewDidLoad() {
+    ionViewDidEnter() {
+      console.log("splashScreen hide");
       this.splashScreen.hide();
      }
     
@@ -106,7 +117,7 @@ export class LoginPage {
             console.log("funfou ,", userPerfil);
             console.log("loginUser é Aluno");
             this.loading.dismiss().then(() => {
-              this.navCtrl.setRoot(HomePage);
+              console.log("logado");
             });
           },
           error => {

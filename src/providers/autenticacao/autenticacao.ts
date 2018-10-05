@@ -66,11 +66,10 @@ constructor() {}
 			singup.id = newUser.user.uid;
 			console.log("singup: ", singup);
           firebase.database().ref(`/user_perfil/${singup.matricula}`).update(singup).then(()=>{
-																				var user = firebase.auth().currentUser;
-																				user.sendEmailVerification().then(function(){
-																					
+																				newUser.user.sendEmailVerification().then(function(){
+																					console.log("Sucesso ao enviar o emial: ",newUser.user);
 																				}).catch(function(error) {
-
+																					console.log("erro ao enviar o emial: ",newUser.user);
 																				});			
 
 																			 });

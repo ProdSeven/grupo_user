@@ -8,6 +8,7 @@ import firebase from 'firebase';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import { AutenticacaoProvider } from '../providers/autenticacao/autenticacao';
 import { CriarContaPage } from '../pages/criar-conta/criar-conta';
+import { LoginPage } from '../pages/login/login';
 @Component({
   templateUrl: 'app.html'
 })
@@ -34,49 +35,52 @@ export class MyApp {
     firebase.initializeApp(FIREBASE_CREDENTIALS);
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
-        // let toast = toastCtrl.create({
-        //   message:"Logout",
-        //   duration:3000
-        // });
-        // toast.present();
         this.firebaseProvider.refOff("/user_perfil/"+user);
         this.firebaseProvider.refOff("/user_perfil/"+user+"/cautelas_pa/");
         this.firebaseProvider.refOff("/administrativo/cautelas");
         this.pages = [];
         let geral = [
-          { title: 'Login', component: 'login', cesso: true },
+          { title: 'Login', component: LoginPage, cesso: true },
           { title: 'Criar conta', component: CriarContaPage, cesso: true },
-          { title: 'Esqueci minha senha', component: 'login', acesso: true }
+          { title: 'Esqueci minha senha', component: LoginPage, acesso: true }
         ];
         this.pages.Geral = geral;
+        console.log("pages", this.pages);
         this.nome = null;
         this.user = {emailVerified:null};
         this.perfil = null;
         this.email = null;
         this.imagen = null;
         this.caut_pa_noti = 0;
-        this.authProvider.logoutUser();
-        this.rootPage = 'login'; 
+        this.nav.setRoot(LoginPage);
         console.log("não tem gente logada ", this.rootPage);
         //unsubscribe();
       }else{
-          // if(user.emailVerified == false){
-          //   let alert = alertCtrl.create({
-          //     title:"Verifique seu email: "+user.email,
-          //     message:"enviamos um link de confirmação para o seu email, a sua conta será liberada sómente após a confirmação do seu email.",
-          //   });
-          //   alert.present();
-          // }
-          // let toast = toastCtrl.create({
-          //   message:"Login",
-          //   duration:3000
-          // });
-          // toast.present();
-          this.user = user;
+          console.log("rootPage1: ",this.rootPage);
           console.log("email verificado",user.emailVerified);
-          this.cautelas_paOn(user.uid);
-          this.AtualizarStatus();
-          this.rootPage = HomePage;
+          if(user.emailVerified == true){
+            this.user = user;
+            this.rootPage = HomePage;
+            this.cautelas_paOn(user.uid);
+            this.AtualizarStatus();
+          }else{
+            console.log("rootPage2: ",this.rootPage);
+            const confirm = this.alertCtrl.create({
+              title: 'Enviamos um link de confirmação para o seu email '+user.email,
+              subTitle:"Se o email de confirmação não chegou, entre em contato com o setor GTI e informe o seu problema.",
+              message: 'para a sua segurança a sua conta só desbloqueara após a verificação do seu email, após a confirmação do email sua conta será liberada.',
+              buttons: [
+              {
+                text: 'Ok',
+                handler: () => {
+                console.log('Ok');
+                }
+              }
+              ]
+            });
+            confirm.present();
+            this.authProvider.logoutUser();
+          }
           console.log("tem gente logada ",this.rootPage);
           //unsubscribe();
       }
@@ -107,9 +111,9 @@ export class MyApp {
           this.firebaseProvider.refOff("/administrativo/cautelas");
           this.pages = [];
           let geral = [
-            { title: 'Login', component: 'login', cesso: true },
+            { title: 'Login', component: LoginPage, cesso: true },
             { title: 'Criar conta', component: CriarContaPage, cesso: true },
-            { title: 'Esqueci minha senha', component: 'login', acesso: true }
+            { title: 'Esqueci minha senha', component: LoginPage, acesso: true }
           ];
           this.pages["Geral"] = geral;
           this.nome = null;
@@ -119,7 +123,7 @@ export class MyApp {
           this.imagen = null;
           this.caut_pa_noti = 0;
           this.authProvider.logoutUser();
-          this.rootPage = 'login';
+          this.rootPage = LoginPage;
         }
         });
     });
@@ -180,9 +184,9 @@ export class MyApp {
             this.firebaseProvider.refOff("/administrativo/cautelas");
             this.pages = [];
             let geral = [
-              { title: 'Login', component: 'login', cesso: true },
+              { title: 'Login', component: LoginPage, cesso: true },
               { title: 'Criar conta', component: CriarContaPage, cesso: true },
-              { title: 'Esqueci minha senha', component: 'login', acesso: true }
+              { title: 'Esqueci minha senha', component: LoginPage, acesso: true }
             ];
             this.pages["Geral"] = geral;
             this.nome = null;
@@ -192,7 +196,7 @@ export class MyApp {
             this.imagen = null;
             this.caut_pa_noti = 0;
             this.authProvider.logoutUser();
-            this.rootPage = 'login';
+            this.rootPage = LoginPage;
             refresher.complete();
           }
           },error=>{
@@ -231,6 +235,28 @@ export class MyApp {
     });
   }
 
+  Sair2(){
+    this.firebaseProvider.getuser().then(user=>{
+      this.firebaseProvider.refOff("/func_perfil/"+user);
+      this.firebaseProvider.refOff("/func_perfil/"+user+"/cautelas_pa/");
+      this.firebaseProvider.refOff("/administrativo/cautelas");
+      this.pages = [];
+      let geral = [
+        { title: 'Login', component: LoginPage, cesso: true },
+        { title: 'Criar conta', component: CriarContaPage, cesso: true },
+        { title: 'Esqueci minha senha', component: LoginPage, acesso: true }
+      ];
+      this.pages["Geral"] = geral;
+      this.nome = null;
+      this.user = {emailVerified:null};
+      this.perfil = null;
+      this.email = null;
+      this.imagen = null;
+      this.caut_pa_noti = 0;
+      this.authProvider.logoutUser();
+    });
+  }
+
   Sair() {
     const confirm = this.alertCtrl.create({
       title: 'Realmente deseja sair da sua conta?',
@@ -244,15 +270,16 @@ export class MyApp {
         {
           text: 'Sim',
           handler: () => {
+            this.splashScreen.show();
             this.firebaseProvider.getuser().then(user=>{
             this.firebaseProvider.refOff("/user_perfil/"+user);
             this.firebaseProvider.refOff("/user_perfil/"+user+"/cautelas_pa/");
             this.firebaseProvider.refOff("/administrativo/cautelas");
             this.pages = [];
             let geral = [
-              { title: 'Login', component: 'login', cesso: true },
+              { title: 'Login', component: LoginPage, cesso: true },
               { title: 'Criar conta', component: CriarContaPage, cesso: true },
-              { title: 'Esqueci minha senha', component: 'login', acesso: true }
+              { title: 'Esqueci minha senha', component: LoginPage, acesso: true }
             ];
             this.pages["Geral"] = geral;
             this.nome = null;
