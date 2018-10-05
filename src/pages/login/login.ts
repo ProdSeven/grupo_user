@@ -75,9 +75,9 @@ export class LoginPage {
                 this.backgroundMode.moveToBackground();
               }
 						}else{
-						this.navCtrl.pop();
+						  this.navCtrl.pop();
 						 } 
-          })
+          });
         });
   	    this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION,
                                                     this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION,
@@ -117,7 +117,12 @@ export class LoginPage {
             console.log("funfou ,", userPerfil);
             console.log("loginUser é Aluno");
             this.loading.dismiss().then(() => {
-              console.log("logado");
+              if (authData.user.emailVerified == true) {
+                this.navCtrl.setRoot(HomePage);
+                console.log("logado");
+              }else{
+                console.log("email nao autenticado");
+              }
             });
           },
           error => {

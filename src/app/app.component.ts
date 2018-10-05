@@ -59,8 +59,9 @@ export class MyApp {
           console.log("rootPage1: ",this.rootPage);
           console.log("email verificado",user.emailVerified);
           if(user.emailVerified == true){
+            console.log("email verificado true");
             this.user = user;
-            this.rootPage = HomePage;
+            this.nav.setRoot(HomePage);
             this.cautelas_paOn(user.uid);
             this.AtualizarStatus();
           }else{
@@ -105,7 +106,7 @@ export class MyApp {
             console.log("pages: ",this.pages); 
           });
         }else{
-          console.log("usuario nao encontrado em uer_perfil");
+          console.log("usuario nao encontrado em user_perfil");
           this.firebaseProvider.refOff("/user_perfil/"+user);
           this.firebaseProvider.refOff("/user_perfil/"+user+"/cautelas_pa/");
           this.firebaseProvider.refOff("/administrativo/cautelas");
