@@ -25,7 +25,7 @@
 
 
 <ion-content  id="app_fundo_cinza" >
-  <div [ngSwitch]="seg" *ngIf="!encaminhar">
+  <div (swipe)="swipeEvent($event)" [ngSwitch]="seg" style="height: 100%;width: 100%;" *ngIf="!encaminhar">
       <ion-list *ngSwitchCase="'reque'">
           <div *ngIf="requerimento != null">
               <div id="cardInfo">
@@ -112,7 +112,9 @@
                     </div>
                 </div>
             </div>
-            <h4 id="subtitulo" text-center *ngIf="requerimento != null && !requerimento.parecer">Não há parecer dos setores</h4>
+            <div id="centroTotalInfo" *ngIf="requerimento != null && !requerimento.parecer">
+                <h4 id="subtituloVazio" text-center>Não há parecer dos setores</h4>
+            </div>
     </ion-list>
 
   </div>

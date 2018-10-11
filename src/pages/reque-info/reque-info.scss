@@ -100,4 +100,20 @@ page-reque-info {
     #situacao{
         text-transform: capitalize;
     }
+
+    #centroTotalInfo{
+        margin-top: 5px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #subtituloVazio{
+        color: rgb(103, 110, 117);
+        position: fixed;
+        font-size: 14px;
+    }
 }

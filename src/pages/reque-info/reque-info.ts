@@ -48,6 +48,20 @@ export class RequeInfoPage {
     console.log('ionViewDidLoad RequeInfoPage');
   }
 
+  swipeEvent(event) {
+    console.log('seg: ',this.seg);
+    console.log('event.direction: ',event.direction);
+    if(event.direction === 2 && this.seg == 'reque') {
+      console.log('parecer');
+      this.seg = 'parecer';
+    }else{
+      if(event.direction === 4 && this.seg == 'parecer') {
+        console.log('reque');
+        this.seg = 'reque';
+      }
+    }
+  }
+
   voltar(){
       this.viewCtrl.dismiss();
   }
