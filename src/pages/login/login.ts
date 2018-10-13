@@ -148,9 +148,6 @@ export class LoginPage {
         }else{
           let msg = 'Informações invalidas';
           this.loading.dismiss().then(() => {
-            this.authProvider.logoutUser().then(() => {
-              this.navCtrl.setRoot(LoginPage);
-            });
             const alert: Alert = this.alertCtrl.create({
               title: msg,
               message: "Algumas das suas informações não estão corretas. Por favor, tente novamente.",

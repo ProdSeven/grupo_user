@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { resolveDefinition } from '@angular/core/src/view/util';
+import { AlertController } from 'ionic-angular';
 /*
   Generated class for the FirebaseProvider provider.
 
@@ -11,7 +12,7 @@ import { resolveDefinition } from '@angular/core/src/view/util';
 export class FirebaseProvider {
   user;
   cpf = null;
-  constructor() {
+  constructor(private alertCtrl: AlertController) {
     console.log('Hello FirebaseProvider Provider');
   }
 
@@ -29,7 +30,7 @@ export class FirebaseProvider {
               list[setor.val()] = [];
               if(setor.val() == "Geral"){
                 list[setor.val()].push({title:"Home",component:'home',acesso:true});
-                //list[setor.val()].push({title:"Perfil",component:'home',acesso:true});
+                list[setor.val()].push({title:"Perfil",component:'perfil',acesso:true});
               }
               result.forEach(modulo => {
               if(modulo.val().acesso == true && modulo.val().title != "Home"){
@@ -109,6 +110,74 @@ export class FirebaseProvider {
         }
       });
   }); 
+  }
+
+  delImage(image):Promise<any>{
+		return firebase.storage().refFromURL(image).delete();
+	}
+
+  updateEmail(newEmail: string, password: string): Promise<any> {
+    this.user = firebase.auth().currentUser;
+    console.log("user: ",this.user);
+		const credential = firebase.auth.EmailAuthProvider.credential(
+			this.user.email,
+			password
+		);
+		return this.user
+			.reauthenticateWithCredential(credential)
+			.then(user1 => {
+				this.user.updateEmail(newEmail).then(user2 => {
+          var user = firebase.auth().currentUser;
+          user.sendEmailVerification().then(()=>{
+            this.getuser().then(user=>{
+              console.log("Sucesso ao enviar o email: ");
+              this.update("user_perfil/"+user,{email:newEmail}).then(()=>{
+                console.log("Sucesso ao atualizar o email: ",this.user.email);
+                const confirm = this.alertCtrl.create({
+                  title: 'Enviamos um link de confirmação para o seu email '+newEmail,
+                  subTitle:"Se o email de confirmação não chegou, entre em contato com o setor GTI e informe o seu problema.",
+                  message: 'Na próxima vez que entrar no aplicativo ele vai verificar se o seu novo email já foi confirmado, se não ele '+
+                  'ficara bloqueado até você clicar no link de confirmação enviado para o seu email.',
+                  buttons: [
+                  {
+                    text: 'Ok',
+                    handler: () => {
+                    console.log('Ok');
+                    }
+                  }
+                  ]
+                });
+                confirm.present();
+              });
+            });
+          }).catch(function(error) {
+            console.log("erro ao enviar o email: ",error);
+          });
+
+				});
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	}
+
+	updatePassword(
+		newPassword: string,
+		oldPassword: string
+	): Promise<any> {
+    this.user = firebase.auth().currentUser;
+    console.log("user: ",this.user);
+		const credential = firebase.auth.EmailAuthProvider.credential(
+			this.user.email,
+			oldPassword
+		);
+		return this.user
+			.reauthenticateWithCredential(credential)
+			.then(user => {
+				this.user.updatePassword(newPassword).then(user => {
+					console.log('Password Changed');
+				});
+			});
   }
 
   getMatricula(cpf){

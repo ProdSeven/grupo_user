@@ -60,6 +60,27 @@
             </ion-datetime>
           </ion-item>
           -->
+          <ion-item id="semCor" (click)="tema()">
+            <ion-grid>
+                <ion-row>
+                    <ion-col class="tituloPerfil" col-12>Tema: </ion-col>
+                    <ion-col col-12>
+                      <div *ngIf="outro == false" class="paddingPerfil">
+                        <span> {{Tema}} </span>
+                      </div>
+                      <div *ngIf="outro == true" class="paddingPerfil">
+                        <span> Outro </span>
+                      </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid> 
+          </ion-item>
+
+          <ion-item *ngIf="outro == true" style="background-color: rgba(255, 255, 255, 0);">
+            <ion-label floating color="blueDark" >Tema(outro):</ion-label>
+              <ion-input  color="blueDark" [(ngModel)]="Tema" [ngModelOptions]="{standalone: true}" type="text" placeholder="Tema" >
+            </ion-input>
+          </ion-item>
           <br>
           <div id="corpoRow">
             <h5 id="corpo">VENHO ATRAVÉS DESTE RESPEITOSAMENTE REQUERER:</h5>
@@ -68,7 +89,7 @@
         </ion-list>
           <div class="edit" id="centro">
             <ion-fab bottom>
-                <button ion-fab (click)="addReque()" color="blueDark" [disabled]="!signupForm.valid"><ion-icon name="md-checkmark"></ion-icon></button>
+                <button ion-fab (click)="addReque()" color="blueDark" [disabled]="!signupForm.valid || (outro == true && (Tema == 'Outro' || Tema == ''))"><ion-icon name="md-checkmark"></ion-icon></button>
             </ion-fab>
           </div>
         </form>

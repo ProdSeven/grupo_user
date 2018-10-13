@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, LoadingController, AlertController, Platform } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 /**
@@ -21,6 +21,9 @@ export class RequeAddPage {
   signupForm:any;
   requerimeto:any = [];
   infoUser:any = [];
+  RequeTipos = [];
+  outro = false;
+  Tema = "";
   @ViewChild('myInput') myInput: ElementRef;
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -28,7 +31,12 @@ export class RequeAddPage {
               private firebaseProvider: FirebaseProvider,
               private viewCtrl: ViewController,
               private loadingCtrl: LoadingController,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private platform: Platform) {
+
+  this.platform.registerBackButtonAction(() => {
+    this.viewCtrl.dismiss();
+  });
   this.signupForm = this.formBuilder.group({
     academico: ["",
           Validators.compose([Validators.minLength(1), Validators.required])
@@ -62,6 +70,7 @@ export class RequeAddPage {
           Validators.compose([Validators.minLength(1), Validators.required])
       ]
   });
+  this.requeTipos();
   this.userOn();
   }
 
@@ -71,6 +80,41 @@ export class RequeAddPage {
 
   resize() {
     this.myInput.nativeElement.style.height = this.myInput.nativeElement.scrollHeight + 'px';
+  }
+
+  requeTipos(){
+    this.firebaseProvider.list("config/RequeTipos").then((RequeTipos:any)=>{
+      this.RequeTipos = RequeTipos;
+    });
+  }
+
+  tema(){
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Setor');
+
+      for (let i = 0; i < this.RequeTipos.length; i++) {
+        alert.addInput({
+          type: 'radio',
+          label: this.RequeTipos[i],
+          value: this.RequeTipos[i],
+          checked: (this.signupForm.value.tema == this.RequeTipos[i]),
+        });
+      }
+
+    alert.addButton('Cancelar');
+    alert.addButton({
+      text: 'Salvar',
+      handler: data => {
+        if(data != 'Outro'){
+          this.outro = false;
+          this.Tema = data;
+        }else{
+          this.outro = true;
+          this.Tema = data;
+        }
+      }
+    });
+    alert.present();
   }
 
   userOn(){
@@ -97,7 +141,7 @@ export class RequeAddPage {
   }
 
   addReque(){
-    if (this.signupForm.valid){
+    if (this.signupForm.valid && (this.Tema != 'Outro' && this.Tema != '')){
       this.voltar();
       let loading = this.loadingCtrl.create({
         spinner: 'ios',
@@ -112,6 +156,7 @@ export class RequeAddPage {
       this.signupForm.value.setor = "SIM";
       this.signupForm.value.situacao = "enviado";
       this.signupForm.value.fila = this.firebaseProvider.fila();
+      this.signupForm.value.tema = this.Tema;
     console.log("singupForm: ",this.signupForm.value);
     let id = this.generateUUID();
     this.signupForm.value.id = id;

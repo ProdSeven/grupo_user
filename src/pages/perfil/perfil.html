@@ -1,0 +1,195 @@
+<ion-header>
+  <ion-navbar color="navBar">
+          <ion-row>
+              <div id="menu-item">
+              <img menuToggle id="menu" src="assets/images/menu_b.svg"/>
+              </div>
+              <ion-title text-center>Perfil</ion-title>
+          </ion-row>
+  </ion-navbar>
+</ion-header> 
+
+
+<ion-content padding id="app_fundo_cinza">
+  <ion-list id="semCor">
+    <ion-item id="semCor">
+          <div id="center">
+             <img (click)="presentActionSheet()" *ngIf="UserPerfil?.imagem" id="fotos" src={{UserPerfil?.imagem}} />
+             <img id="fotos" *ngIf="!UserPerfil?.imagem" src="assets/images/newUser-b.png" />
+    </div>
+          <br>
+    </ion-item>
+  
+    <ion-item id="semCor" (click)="atualizar('nome')">
+          <ion-grid>
+              <ion-row>
+                  <ion-col class="tituloPerfil" col-12> Nome : </ion-col>
+                  <ion-col col-12 *ngIf="UserPerfil?.nome">
+                      {{UserPerfil?.nome}}
+                      <ion-icon item-end name="md-create"></ion-icon>
+                  </ion-col>
+                  <ion-col col-12 class="placeholder-profile" *ngIf="!UserPerfil?.nome">
+                      <span> Nome não cadastrado. </span>
+                  </ion-col>
+              </ion-row>
+          </ion-grid> 
+    </ion-item>
+
+    <ion-item id="semCor" (click)="atualizar('cpf')" >
+      <ion-grid>
+          <ion-row>
+              <ion-col class="tituloPerfil" col-12> Cpf : </ion-col>
+              <ion-col col-12 *ngIf="UserPerfil?.cpf">
+                  {{UserPerfil?.cpf}}
+                  <ion-icon item-end name="md-create"></ion-icon>
+              </ion-col>
+              <ion-col col-12 class="placeholder-profile"
+                       *ngIf="!UserPerfil?.cpf">
+                  <span> Clique aqui para editar. </span>
+              </ion-col>
+          </ion-row>
+      </ion-grid> 
+    </ion-item>
+
+    <ion-item id="semCor">
+      <ion-grid>
+          <ion-row>
+              <ion-col class="tituloPerfil" col-12> Matrícula : </ion-col>
+              <ion-col id="matricula" col-12 *ngIf="UserPerfil?.matricula">
+                  {{UserPerfil?.matricula}}
+              </ion-col>
+          </ion-row>
+      </ion-grid> 
+    </ion-item>
+
+    <ion-item id="semCor" (click)="atualizar('curso')">
+          <ion-grid>
+              <ion-row>
+                  <ion-col class="tituloPerfil" col-12> Curso : </ion-col>
+                  <ion-col col-12 *ngIf="UserPerfil?.curso">
+                      {{UserPerfil?.curso}}
+                      <ion-icon item-end name="md-create"></ion-icon>
+                  </ion-col>
+                  <ion-col col-12 class="placeholder-profile" *ngIf="!UserPerfil?.curso">
+                    <span> Clique aqui para editar. </span>
+                  </ion-col>
+              </ion-row>
+          </ion-grid> 
+    </ion-item>
+
+    <ion-item id="semCor" (click)="atualizar('semestre')">
+          <ion-grid>
+              <ion-row>
+                  <ion-col class="tituloPerfil" col-12> Semestre : </ion-col>
+                  <ion-col col-12 *ngIf="UserPerfil?.semestre">
+                      {{UserPerfil?.semestre}}
+                      <ion-icon item-end name="md-create"></ion-icon>
+                  </ion-col>
+                  <ion-col col-12 class="placeholder-profile" *ngIf="!UserPerfil?.semestre">
+                    <span> Clique aqui para editar. </span>
+                  </ion-col>
+              </ion-row>
+          </ion-grid> 
+    </ion-item>
+
+    <ion-item id="semCor" (click)="atualizar('turno')">
+          <ion-grid>
+              <ion-row>
+                  <ion-col class="tituloPerfil" col-12> Turno : </ion-col>
+                  <ion-col col-12 *ngIf="UserPerfil?.turno">
+                      {{UserPerfil?.turno}}
+                      <ion-icon item-end name="md-create"></ion-icon>
+                  </ion-col>
+                  <ion-col col-12 class="placeholder-profile" *ngIf="!UserPerfil?.turno">
+                    <span> Clique aqui para editar. </span>
+                  </ion-col>
+              </ion-row>
+          </ion-grid> 
+    </ion-item>
+
+    <ion-item id="semCor" (click)="atualizar('telefone')" >
+      <ion-grid>
+          <ion-row>
+              <ion-col class="tituloPerfil" col-12> Telefone: </ion-col>
+              <ion-col col-12 *ngIf="UserPerfil?.telefone">
+                  {{UserPerfil?.telefone}}
+                  <ion-icon item-end name="md-create"></ion-icon>
+              </ion-col>
+              <ion-col col-12 class="placeholder-profile"
+                       *ngIf="!UserPerfil?.telefone">
+                       <span> Clique aqui para editar. </span>
+              </ion-col>
+          </ion-row>
+      </ion-grid> 
+    </ion-item>
+
+    <ion-item id="semCor" (click)="atualizar('celular')" >
+      <ion-grid>
+          <ion-row>
+              <ion-col class="tituloPerfil" col-12> Celular: </ion-col>
+              <ion-col col-12 *ngIf="UserPerfil?.celular">
+                  {{UserPerfil?.celular}}
+                  <ion-icon item-end name="md-create"></ion-icon>
+              </ion-col>
+              <ion-col col-12 class="placeholder-profile"
+                       *ngIf="!UserPerfil?.celular">
+                  <span> Clique aqui para editar. </span>
+              </ion-col>
+          </ion-row>
+      </ion-grid> 
+    </ion-item>
+
+    <ion-item id="semCor" (click)="atualizar('cep')" >
+      <ion-grid>
+          <ion-row>
+              <ion-col class="tituloPerfil" col-12> Cep: </ion-col>
+              <ion-col col-12 *ngIf="UserPerfil?.cep">
+                  {{UserPerfil?.cep}}
+                  <ion-icon item-end name="md-create"></ion-icon>
+              </ion-col>
+              <ion-col col-12 class="placeholder-profile"
+                       *ngIf="!UserPerfil?.cep">
+                  <span> Clique aqui para editar. </span>
+              </ion-col>
+          </ion-row>
+      </ion-grid> 
+    </ion-item>
+
+    <ion-item id="semCor" (click)="atualizar('endereco')" >
+      <ion-grid>
+          <ion-row>
+              <ion-col class="tituloPerfil" col-12> Endereço: </ion-col>
+              <ion-col col-12 *ngIf="UserPerfil?.endereco">
+                  {{UserPerfil?.endereco}}
+                  <ion-icon item-end name="md-create"></ion-icon>
+              </ion-col>
+              <ion-col col-12 class="placeholder-profile"
+                       *ngIf="!UserPerfil?.endereco">
+                  <span> Clique aqui para editar. </span>
+              </ion-col>
+          </ion-row>
+      </ion-grid> 
+    </ion-item>
+    
+    <ion-item id="semCor" (click)="updateEmail()">
+        <ion-grid>
+            <ion-row>
+                <ion-col class="tituloPerfil" col-12> Email: </ion-col>
+                <ion-col col-12 *ngIf="UserPerfil?.email">
+                    {{UserPerfil?.email}}
+                    <ion-icon item-end name="md-create"></ion-icon>
+                </ion-col>
+                <ion-col col-6 class="placeholder-profile" *ngIf="!UserPerfil?.email">
+                    <span> Clique aqui para editar. </span>
+                </ion-col>
+            </ion-row>
+        </ion-grid> 
+    </ion-item>
+    <div id="semCor" class="MudaSenha" (click)="updatePassword()">
+            <ion-row>
+                <ion-col class="tituloPerfil" col-12> Senha: </ion-col>
+                    <p> Clique aqui para modificar sua senha. </p>
+            </ion-row>
+    </div>
+  </ion-list>
+</ion-content>
